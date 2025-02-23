@@ -18,6 +18,7 @@ public class HibernateUtil {
                       .addAnnotatedClass(Estado.class)
                       .addAnnotatedClass(Reparacion.class)
                       .addAnnotatedClass(RepuestoReparacion.class)
+                      .addAnnotatedClass(Telefono.class)
                       .buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
