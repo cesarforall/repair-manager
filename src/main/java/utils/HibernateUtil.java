@@ -5,6 +5,7 @@ import org.hibernate.cfg.Configuration;
 
 import models.Cliente;
 import models.Dispositivo;
+import models.Repuesto;
 
 public class HibernateUtil {
     private static SessionFactory factory;
@@ -15,6 +16,7 @@ public class HibernateUtil {
                       .configure("hibernate.cfg.xml")
                       .addAnnotatedClass(Cliente.class)
                       .addAnnotatedClass(Dispositivo.class)
+                      .addAnnotatedClass(Repuesto.class)
                       .buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
