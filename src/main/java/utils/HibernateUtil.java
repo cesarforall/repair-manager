@@ -3,10 +3,7 @@ package utils;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import models.Cliente;
-import models.Dispositivo;
-import models.Estado;
-import models.Repuesto;
+import models.*;
 
 public class HibernateUtil {
     private static SessionFactory factory;
@@ -19,6 +16,7 @@ public class HibernateUtil {
                       .addAnnotatedClass(Dispositivo.class)
                       .addAnnotatedClass(Repuesto.class)
                       .addAnnotatedClass(Estado.class)
+                      .addAnnotatedClass(Reparacion.class)
                       .buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
