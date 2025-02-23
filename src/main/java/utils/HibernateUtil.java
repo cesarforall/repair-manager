@@ -3,6 +3,8 @@ package utils;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import models.Cliente;
+
 public class HibernateUtil {
     private static SessionFactory factory;
 
@@ -10,6 +12,7 @@ public class HibernateUtil {
         try {
             factory = new Configuration()
                       .configure("hibernate.cfg.xml")
+                      .addAnnotatedClass(Cliente.class)
                       .buildSessionFactory();
         } catch (Exception e) {
             e.printStackTrace();
