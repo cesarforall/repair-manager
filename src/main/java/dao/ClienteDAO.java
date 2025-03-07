@@ -38,8 +38,10 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 
 	@Override
 	public Cliente findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = getSession();
+		Cliente cliente = session.get(Cliente.class, id);
+		session.close();
+		return cliente;
 	}
 
 	@Override
