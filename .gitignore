@@ -1,1 +1,31 @@
 vulcano-lite.db
+# Ignorar la carpeta target/ (generada por Maven)
+/target/
+
+# Ignorar archivos de configuración de Eclipse
+.settings/
+.classpath
+.project
+bin/
+
+# Ignorar archivos de logs y temporales
+*.log
+*.tmp
+*.swp
+
+# Ignorar archivos de Maven (repositorio local)
+/.m2/
+
+# Ignorar archivos específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de configuración local
+*.properties
+*.env
+
+# Ignorar archivos generados por el usuario
+*.class
+*.jar
+*.war
+*.ear
