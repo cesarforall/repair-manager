@@ -4,13 +4,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ClientesController">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ClientesController">
    <children>
-      <TableView fx:id="tablaClientes" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0">
+      <TableView fx:id="tablaClientes" layoutX="14.0" layoutY="14.0" prefHeight="400.0">
          <columns>
-            <TableColumn fx:id="columnaId" text="Id" prefWidth="150" />
-            <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="150" />
-            <TableColumn fx:id="columnaDetalle" text="Detalle" prefWidth="200" />
+            <TableColumn fx:id="columnaId" prefWidth="100" text="Id" />
+            <TableColumn fx:id="columnaNombre" prefWidth="150" text="Nombre" />
+            <TableColumn fx:id="columnaDetalle" prefWidth="200" text="Detalle" />            
          </columns>
       </TableView>
    </children>
