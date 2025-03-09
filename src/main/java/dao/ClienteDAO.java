@@ -46,7 +46,18 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 
 	@Override
 	public List<Cliente> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Cliente> clientes = null;
+		
+		try (Session session = getSession();) {
+			Transaction transaction = session.beginTransaction();
+			
+			clientes = session.createQuery("FROM CLIENTES", Cliente.class).getResultList();
+						
+			transaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return clientes;
 	}
 }
