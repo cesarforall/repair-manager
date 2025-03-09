@@ -12,6 +12,10 @@ public class ClienteService {
 		clienteDAO = new ClienteDAO();
 	}
 	
+	public void create(Cliente cliente) {
+		clienteDAO.save(cliente);
+	}
+	
 	public Cliente getClienteById(int id) {
 		return clienteDAO.findById(id);
 	}
