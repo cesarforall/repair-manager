@@ -22,6 +22,7 @@ public class ClientesController {
     private TableColumn<Cliente, String> columnaNombre;
     @FXML
     private TableColumn<Cliente, String> columnaDetalle;
+   
 
     private ClienteService clienteService = new ClienteService();
 
@@ -30,7 +31,6 @@ public class ClientesController {
     	columnaId.setCellValueFactory(new PropertyValueFactory<>("idCliente"));
     	columnaNombre.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
     	columnaDetalle.setCellValueFactory(new PropertyValueFactory<>("Detalle"));
-    	
     	cargarClientes();
     }
     

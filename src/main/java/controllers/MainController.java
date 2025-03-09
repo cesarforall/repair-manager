@@ -10,7 +10,7 @@ import javafx.scene.control.TabPane;
 public class MainController {
 
     @FXML
-    private TabPane tabPane;
+    private TabPane mainTabPanel;
 
     @FXML
     public void abrirClientes() {
@@ -18,14 +18,30 @@ public class MainController {
         	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientes.fxml"));
         	Parent tablaClientes = loader.load();
 
-            Tab nuevaPestaña = new Tab("Clientes " + (tabPane.getTabs().size() + 1));
+            Tab nuevaPestaña = new Tab("Clientes" + (mainTabPanel.getTabs().size() + 1));
             nuevaPestaña.setContent(tablaClientes);
             
-            tabPane.getTabs().add(nuevaPestaña);
-            tabPane.getSelectionModel().select(nuevaPestaña);
+            mainTabPanel.getTabs().add(nuevaPestaña);
+            mainTabPanel.getSelectionModel().select(nuevaPestaña);
         } catch (IOException e) {
-            //e.printStackTrace();
-        	System.out.println("MainController");
+            e.printStackTrace();
         }
+    }
+    
+    @FXML
+    public void abrirFormCliente() {
+    	try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formCliente.fxml"));
+			Parent formCliente = loader.load();
+			
+			Tab formClienteTab = new Tab("Añadir Cliente");
+			formClienteTab.setContent(formCliente);
+			
+			mainTabPanel.getTabs().add(formClienteTab);
+			mainTabPanel.getSelectionModel().select(formClienteTab);
+		} catch (IOException e) {
+			System.err.println("Error al abrir el formulario de Cliente.");
+			e.printStackTrace();
+		}
     }
 }
