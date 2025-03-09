@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FormClienteController">
+<AnchorPane prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FormClienteController">
    <children>
       <VBox prefHeight="240.0" prefWidth="320.0">
          <children>
@@ -36,9 +36,14 @@
                   <TextField fx:id="phoneNumberTextField" GridPane.rowIndex="5" />
                </children>
             </GridPane>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="messageLabel" />
+               </children>
+            </HBox>
             <HBox alignment="CENTER" prefHeight="100.0">
                <children>
-                  <Button mnemonicParsing="false" text="Guardar" onAction="#createCliente"/>
+                  <Button mnemonicParsing="false" onAction="#createCliente" text="Añadir" />
                </children>
             </HBox>
          </children>
