@@ -14,14 +14,17 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 	}
 
 	@Override
-	public void save(Cliente cliente) {
-		Session session = getSession();
-		Transaction transaction = session.beginTransaction();
-		
-		session.persist(cliente);
-		
-		transaction.commit();
-		session.close();		
+	public void save(Cliente cliente) {		
+		try (Session session = getSession()) {
+			Transaction transaction = session.beginTransaction();
+			
+			session.persist(cliente);
+			
+			transaction.commit();
+		} catch (Exception e) {
+			System.err.println("Error en dao.");
+			e.printStackTrace();
+		}		
 	}
 
 	@Override
