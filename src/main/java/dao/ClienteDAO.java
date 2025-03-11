@@ -34,8 +34,20 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 	}
 
 	@Override
-	public void delete(Cliente entity) {
-		// TODO Auto-generated method stub
+	public void delete(Cliente cliente) {
+		Transaction transaction = null;
+		
+		try (Session session = getSession()) {
+			transaction = session.beginTransaction();
+			session.remove(cliente);			
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			System.err.println("Error en dao.");
+			e.printStackTrace();
+		}
 		
 	}
 

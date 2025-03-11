@@ -16,6 +16,10 @@ public class ClienteService {
 		clienteDAO.save(cliente);
 	}
 	
+	public void delete(Cliente cliente) {
+		clienteDAO.delete(cliente);
+	}
+	
 	public Cliente getClienteById(int id) {
 		return clienteDAO.findById(id);
 	}
