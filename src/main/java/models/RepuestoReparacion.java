@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "REPUESTOS_REPARACIONES")
+@IdClass(RepuestoReparacionId.class)
 public class RepuestoReparacion {
 
     @Id
