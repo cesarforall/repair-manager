@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,7 +10,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
-import models.Cliente;
+import model.Cliente;
 import service.ClienteService;
 
 import java.util.List;

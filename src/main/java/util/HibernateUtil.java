@@ -1,9 +1,9 @@
-package utils;
+package util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import models.*;
+import model.*;
 
 public class HibernateUtil {
     private static SessionFactory factory;

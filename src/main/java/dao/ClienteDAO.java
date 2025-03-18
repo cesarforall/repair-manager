@@ -5,8 +5,8 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import models.Cliente;
-import utils.HibernateUtil;
+import model.Cliente;
+import util.HibernateUtil;
 
 public class ClienteDAO implements GenericDAO<Cliente>{
 	private Session getSession() {

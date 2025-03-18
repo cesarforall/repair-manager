@@ -3,7 +3,7 @@ package service;
 import java.util.List;
 
 import dao.ClienteDAO;
-import models.Cliente;
+import model.Cliente;
 
 public class ClienteService {
 	private ClienteDAO clienteDAO;

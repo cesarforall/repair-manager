@@ -1,9 +1,9 @@
-package controllers;
+package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import models.Cliente;
+import model.Cliente;
 import service.ClienteService;
 
 public class FormClienteController {
