@@ -30,6 +30,13 @@ public class MainController {
     
     @FXML
     public void abrirFormCliente() {
+        for (Tab tab : mainTabPanel.getTabs()) {
+            if (tab.getText().equals("Añadir Cliente")) {
+                mainTabPanel.getSelectionModel().select(tab);
+                return;
+            }
+        }
+        
     	try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formCliente.fxml"));
 			Parent formCliente = loader.load();
