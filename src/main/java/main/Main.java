@@ -28,16 +28,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    /*
-	public static void main(String[] args) {
-        ClienteService clienteService = new ClienteService();
-        
-        try {
-        	Cliente cliente = clienteService.getClienteById(2);
-			System.out.println(cliente.getNombre());
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}
-    }
-    */
 }
