@@ -18,7 +18,7 @@ public class MainController {
         	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientes.fxml"));
         	Parent tablaClientes = loader.load();
 
-            Tab nuevaPestaña = new Tab("Clientes" + (mainTabPanel.getTabs().size() + 1));
+            Tab nuevaPestaña = new Tab("Clientes");
             nuevaPestaña.setContent(tablaClientes);
             
             mainTabPanel.getTabs().add(nuevaPestaña);
