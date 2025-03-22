@@ -19,7 +19,7 @@ import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class ClientesController {
+public class ClientesListController {
 
     @FXML
     private TableView<Cliente> tablaClientes;

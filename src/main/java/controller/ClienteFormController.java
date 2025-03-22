@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import model.Cliente;
 import service.ClienteService;
 
-public class FormClienteController {
+public class ClienteFormController {
 	@FXML
 	private TextField nameTextField;
 	@FXML

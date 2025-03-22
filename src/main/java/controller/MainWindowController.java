@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
-public class MainController {
+public class MainWindowController {
 
     @FXML
     private TabPane mainTabPanel;
