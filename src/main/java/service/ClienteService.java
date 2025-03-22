@@ -3,10 +3,13 @@ package service;
 import java.util.List;
 
 import dao.ClienteDAO;
+import dao.TelefonoDAO;
 import model.Cliente;
+import model.Telefono;
 
 public class ClienteService {
 	private ClienteDAO clienteDAO;
+	private TelefonoDAO telefonoDAO;
 	
     public void save(Cliente cliente) {
         try {
@@ -17,6 +20,18 @@ public class ClienteService {
         }
     }
     
+    public void saveClientWithPhone(Cliente cliente, Telefono telefono) {
+        try {
+            clienteDAO.save(cliente);
+            if (telefono != null) {
+                telefonoDAO.save(telefono);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en ClienteService al guardar el cliente con teléfono.");
+            e.printStackTrace();
+        }
+    }
+
     public void update(Cliente cliente) {
         try {
             clienteDAO.update(cliente);
