@@ -32,7 +32,7 @@ public class FormClienteController {
 			try {
 				Cliente cliente = new Cliente(inputName, inputDetails);
 				
-				clienteService.create(cliente);
+				clienteService.save(cliente);
 				messageLabel.setStyle("-fx-text-fill: green;");
 				messageLabel.setText("Cliente \"" + inputName + "\" añadido correctamente.");
 				nameTextField.setText(null);

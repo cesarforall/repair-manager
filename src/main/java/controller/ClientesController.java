@@ -90,13 +90,13 @@ public class ClientesController {
     }
     
     private void cargarClientes() {
-    	List<Cliente> clientes = clienteService.getAll();
+    	List<Cliente> clientes = clienteService.findAll();
     	ObservableList<Cliente> observableClientes = FXCollections.observableArrayList(clientes);
     	tablaClientes.setItems(observableClientes);
     }
     
     private void refreshTable() {
-    	List<Cliente> clientes = clienteService.getAll();
+    	List<Cliente> clientes = clienteService.findAll();
     	tablaClientes.setItems(FXCollections.observableArrayList(clientes));
     }
 }

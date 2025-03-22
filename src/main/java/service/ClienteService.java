@@ -11,6 +11,11 @@ public class ClienteService {
 	private ClienteDAO clienteDAO;
 	private TelefonoDAO telefonoDAO;
 	
+    public ClienteService() {
+        clienteDAO = new ClienteDAO();
+        telefonoDAO = new TelefonoDAO();
+    }
+	
     public void save(Cliente cliente) {
         try {
             clienteDAO.save(cliente);
