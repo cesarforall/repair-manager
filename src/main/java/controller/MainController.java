@@ -15,7 +15,7 @@ public class MainController {
     @FXML
     public void abrirClientes() {
         try {
-        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientes.fxml"));
+        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientesListView.fxml"));
         	Parent tablaClientes = loader.load();
 
             Tab nuevaPestaña = new Tab("Clientes");
@@ -38,7 +38,7 @@ public class MainController {
         }
         
     	try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/formCliente.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clienteForm.fxml"));
 			Parent formCliente = loader.load();
 			
 			Tab formClienteTab = new Tab("Añadir Cliente");
