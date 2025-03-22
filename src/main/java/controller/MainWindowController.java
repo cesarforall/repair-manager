@@ -51,4 +51,28 @@ public class MainWindowController {
 			e.printStackTrace();
 		}
     }
+    
+    @FXML
+    public void openDeviceForm() {
+    	for (Tab tab : mainTabPanel.getTabs()) {
+            if (tab.getText().equals("Añadir Dispositivo")) {
+                mainTabPanel.getSelectionModel().select(tab);
+                return;
+            }
+    	}
+    	
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dispositivoForm.fxml"));
+    		Parent dispositivoForm = loader.load();
+    		
+    		Tab dispositivoFormTab = new Tab("Añadir Dispositivo");
+    		dispositivoFormTab.setContent(dispositivoForm);
+    		
+    		mainTabPanel.getTabs().add(dispositivoFormTab);
+    		mainTabPanel.getSelectionModel().select(dispositivoFormTab);
+    	} catch (IOException e) {
+    		System.err.println("Error al abrir el formulario de Dispositivo.");
+			e.printStackTrace();
+		}
+    }
 }

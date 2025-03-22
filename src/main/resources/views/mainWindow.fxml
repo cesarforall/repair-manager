@@ -13,6 +13,7 @@
           <Menu mnemonicParsing="false" text="Añadir">
             <items>
               <MenuItem mnemonicParsing="false" text="Cliente" onAction="#abrirFormCliente" />
+              <MenuItem mnemonicParsing="false" text="Dispositivo" onAction="#openDeviceForm" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Ver">
