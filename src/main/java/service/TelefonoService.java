@@ -50,7 +50,7 @@ public class TelefonoService {
         }
     }
 
-    public List<Telefono> getAll() {
+    public List<Telefono> findAll() {
         try {
             return telefonoDAO.findAll();
         } catch (Exception e) {
