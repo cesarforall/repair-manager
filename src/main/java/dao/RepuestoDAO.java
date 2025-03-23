@@ -75,7 +75,7 @@ public class RepuestoDAO implements GenericDAO<Repuesto>{
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			repuestos = session.createQuery("FROM REPUESTOS", Repuesto.class).getResultList();						
+			repuestos = session.createQuery("FROM Repuesto", Repuesto.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
 			System.err.println("Error al obtener todos los repuestos.");
