@@ -74,5 +74,29 @@ public class MainWindowController {
     		System.err.println("Error al abrir el formulario de Dispositivo.");
 			e.printStackTrace();
 		}
+    }        
+    
+    @FXML
+    public void openRepuestosView() {
+        for (Tab tab : mainTabPanel.getTabs()) {
+            if (tab.getText().equals("Gestionar Repuestos")) {
+                mainTabPanel.getSelectionModel().select(tab);
+                return;
+            }
+        }
+        
+    	try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/repuestosView.fxml"));
+			Parent repuestosView = loader.load();
+			
+			Tab repuestosViewTab = new Tab("Gestionar Repuestos");
+			repuestosViewTab.setContent(repuestosView);
+			
+			mainTabPanel.getTabs().add(repuestosViewTab);
+			mainTabPanel.getSelectionModel().select(repuestosViewTab);
+		} catch (IOException e) {
+			System.err.println("Error al abrir la vista de Repuestos.");
+			e.printStackTrace();
+		}
     }
 }

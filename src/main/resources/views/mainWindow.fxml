@@ -21,6 +21,11 @@
               <MenuItem mnemonicParsing="false" text="Clientes" onAction="#abrirClientes"/>
             </items>
           </Menu>
+          <Menu mnemonicParsing="false" text="Gestionar">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Repuestos" onAction="#openRepuestosView"/>
+            </items>
+          </Menu>
           <Menu mnemonicParsing="false" text="Configurar">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
