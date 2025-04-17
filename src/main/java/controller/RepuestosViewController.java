@@ -67,6 +67,8 @@ public class RepuestosViewController {
 				messageLabel.setText("Repuesto \"" + sparePartName + "\" añadido correctamente.");
 				nameTextField.setText(null);
 				priceTextField.setText(null);
+				
+				refreshSpareParts();
 			} catch (Exception e) {
 				System.err.println("Error en RepuestosController al añadir repuesto.");
 				e.printStackTrace();
@@ -98,5 +100,10 @@ public class RepuestosViewController {
 			}
     		
     	}).start();    	
+    }
+    
+    private void refreshSpareParts() {
+    	List<Repuesto> repuestos = repuestoService.findAll();
+    	repuestosTable.setItems(FXCollections.observableArrayList(repuestos));
     }
 }
