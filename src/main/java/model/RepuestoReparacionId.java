@@ -5,7 +5,12 @@ import java.util.Objects;
 
 public class RepuestoReparacionId implements Serializable {
 
-    private Long reparacion;
+	/**
+	 * Clase embebida que representa la clave compuesta para la entidad RepuestoReparacion.
+	 * Combina los IDs de reparación y repuesto.
+	 */
+	private static final long serialVersionUID = 1L;
+	private Long reparacion;
     private Long repuesto;
 
     public RepuestoReparacionId() {}
@@ -16,12 +21,12 @@ public class RepuestoReparacionId implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RepuestoReparacionId that = (RepuestoReparacionId) o;
-        return Objects.equals(reparacion, that.reparacion) &&
-               Objects.equals(repuesto, that.repuesto);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        RepuestoReparacionId repuestoReparacionId = (RepuestoReparacionId) obj;
+        return Objects.equals(reparacion, repuestoReparacionId.reparacion) &&
+               Objects.equals(repuesto, repuestoReparacionId.repuesto);
     }
 
     @Override
