@@ -99,4 +99,28 @@ public class MainWindowController {
 			e.printStackTrace();
 		}
     }
+    
+    @FXML
+    public void openEstadosView() {
+        for (Tab tab : mainTabPanel.getTabs()) {
+            if (tab.getText().equals("Configurar Estados")) {
+                mainTabPanel.getSelectionModel().select(tab);
+                return;
+            }
+        }
+        
+    	try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/estadosView.fxml"));
+			Parent estadosView = loader.load();
+			
+			Tab estadosViewTab = new Tab("Configurar Estados");
+			estadosViewTab.setContent(estadosView);
+			
+			mainTabPanel.getTabs().add(estadosViewTab);
+			mainTabPanel.getSelectionModel().select(estadosViewTab);
+		} catch (IOException e) {
+			System.err.println("Error al abrir la vista de Estados.");
+			e.printStackTrace();
+		}
+    }
 }

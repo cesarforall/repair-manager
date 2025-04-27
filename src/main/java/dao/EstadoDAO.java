@@ -75,7 +75,7 @@ public class EstadoDAO implements GenericDAO<Estado>{
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			estados = session.createQuery("FROM estadoS", Estado.class).getResultList();						
+			estados = session.createQuery("FROM Estado", Estado.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
 			System.err.println("Error al obtener todos los estados.");

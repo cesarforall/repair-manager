@@ -13,11 +13,23 @@ public class Estado {
 
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
+    
+    @Column(name = "descripcion", nullable = false, unique = false)
+    private String descripcion;
 
-    public Estado() {}
+    public String getDescripcion() {
+		return descripcion;
+	}
 
-    public Estado(String nombre) {
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public Estado() {}
+
+    public Estado(String nombre, String descripcion) {
         this.nombre = nombre;
+        this.descripcion = descripcion;
     }
 
     public int getIdEstado() {
