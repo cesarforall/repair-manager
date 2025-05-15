@@ -4,13 +4,22 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MainWindowController {
 
     @FXML
     private TabPane mainTabPanel;
+    @FXML
+    private Label statusMessageLabel;
+    
+    @FXML
+    public void initialize() {
+    	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
+    }
 
     @FXML
     public void abrirClientes() {
