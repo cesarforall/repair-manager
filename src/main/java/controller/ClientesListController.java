@@ -20,7 +20,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ClientesListController {
-
     @FXML
     private TableView<Cliente> tablaClientes;
     @FXML
@@ -28,9 +27,7 @@ public class ClientesListController {
     @FXML
     private TableColumn<Cliente, String> columnaNombre;
     @FXML
-    private TableColumn<Cliente, String> columnaDetalle;
-    
-   
+    private TableColumn<Cliente, String> columnaDetalle;   
 
     private ClienteService clienteService = new ClienteService();
 
@@ -85,7 +82,7 @@ public class ClientesListController {
     			ClienteService clienteService = new ClienteService();
     			clienteService.delete(cliente);
     		}
-    		refreshTable();
+    		updateClientes();
     	}
     }
     
@@ -95,7 +92,7 @@ public class ClientesListController {
     	tablaClientes.setItems(observableClientes);
     }
     
-    private void refreshTable() {
+    public void updateClientes() {
     	List<Cliente> clientes = clienteService.findAll();
     	tablaClientes.setItems(FXCollections.observableArrayList(clientes));
     }
