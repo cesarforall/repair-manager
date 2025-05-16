@@ -16,6 +16,7 @@ import service.ClienteService;
 import java.util.List;
 import java.util.Optional;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -27,7 +28,9 @@ public class ClientesListController {
     @FXML
     private TableColumn<Cliente, String> columnaNombre;
     @FXML
-    private TableColumn<Cliente, String> columnaDetalle;   
+    private TableColumn<Cliente, String> columnaDetalle;
+    
+    ObservableList<Cliente> observableClientes;
 
     private ClienteService clienteService = new ClienteService();
 
@@ -38,7 +41,8 @@ public class ClientesListController {
     	columnaDetalle.setCellValueFactory(new PropertyValueFactory<>("Detalle"));
     	
     	addContextMenu();
-    	cargarClientes();
+    	
+    	Platform.runLater(this::cargarClientes);
     }
     
     private void addContextMenu() {
@@ -87,9 +91,17 @@ public class ClientesListController {
     }
     
     private void cargarClientes() {
-    	List<Cliente> clientes = clienteService.findAll();
-    	ObservableList<Cliente> observableClientes = FXCollections.observableArrayList(clientes);
-    	tablaClientes.setItems(observableClientes);
+    	new Thread(() -> {
+    		try {
+				List<Cliente> clientes = clienteService.findAll();
+				observableClientes = FXCollections.observableArrayList(clientes);
+				
+				tablaClientes.setItems(observableClientes);
+			} catch (Exception e) {
+				System.err.println("Error en ClientesListController al cargar los Clientes.");
+	            e.printStackTrace();
+			}
+    	}).start();
     }
     
     public void updateClientes() {
