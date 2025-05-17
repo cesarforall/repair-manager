@@ -60,4 +60,9 @@ public class Dispositivo {
     public void setNumeroSerie(String numeroSerie) {
         this.numeroSerie = numeroSerie;
     }
+    
+    @Override
+	public String toString() {
+		return idDispositivo + " " + nombre + " " + modelo + " " + numeroSerie;
+	}
 }
