@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -30,6 +31,8 @@ public class ClientesListController {
     @FXML
     private TableColumn<Cliente, String> columnaDetalle;
     
+    Label placeholderLabel;
+    
     ObservableList<Cliente> observableClientes;
 
     private ClienteService clienteService = new ClienteService();
@@ -39,6 +42,9 @@ public class ClientesListController {
     	columnaId.setCellValueFactory(new PropertyValueFactory<>("idCliente"));
     	columnaNombre.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
     	columnaDetalle.setCellValueFactory(new PropertyValueFactory<>("Detalle"));
+    	
+    	placeholderLabel = new Label("Cargando Clientes...");
+    	tablaClientes.setPlaceholder(placeholderLabel);
     	
     	addContextMenu();
     	
@@ -100,6 +106,9 @@ public class ClientesListController {
 			} catch (Exception e) {
 				System.err.println("Error en ClientesListController al cargar los Clientes.");
 	            e.printStackTrace();
+	            
+	            placeholderLabel = new Label("Error al cargar los clientes");
+	        	tablaClientes.setPlaceholder(placeholderLabel);
 			}
     	}).start();
     }
