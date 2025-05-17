@@ -46,4 +46,9 @@ public class Cliente {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
+    
+    @Override
+	public String toString() {
+		return idCliente + " " + nombre + " " + (detalle != null ? detalle : "");
+	}
 }
