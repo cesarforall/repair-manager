@@ -75,7 +75,7 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			dispositivos = session.createQuery("FROM DISPOSITIVOS", Dispositivo.class).getResultList();						
+			dispositivos = session.createQuery("FROM Dispositivo", Dispositivo.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
 			System.err.println("Error al obtener todos los dispositivos.");
