@@ -27,11 +27,11 @@ public class MainWindowController {
     @FXML
     public void abrirClientes() {
         try {
-        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientesListView.fxml"));
+        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientesView.fxml"));
         	Parent tablaClientes = loader.load();
         	
-        	ClientesListController clientesListController = loader.getController();
-        	clientesListController.setStatusCallback(this::setStatusMessage);
+        	ClientesViewController clientesViewController = loader.getController();
+        	clientesViewController.setStatusCallback(this::setStatusMessage);
 
             Tab nuevaPestaña = new Tab("Clientes");
             nuevaPestaña.setContent(tablaClientes);
