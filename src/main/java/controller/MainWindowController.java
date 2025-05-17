@@ -142,6 +142,30 @@ public class MainWindowController {
 		}
     }
     
+    @FXML
+    public void openReparacionForm() {
+        for (Tab tab : mainTabPanel.getTabs()) {
+            if (tab.getText().equals("Añadir Reparación")) {
+                mainTabPanel.getSelectionModel().select(tab);
+                return;
+            }
+        }
+        
+    	try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/reparacionesFormView.fxml"));
+			Parent reparacionFormView = loader.load();
+			
+			Tab reparacionFormTab = new Tab("Añadir Reparación");
+			reparacionFormTab.setContent(reparacionFormView);
+			
+			mainTabPanel.getTabs().add(reparacionFormTab);
+			mainTabPanel.getSelectionModel().select(reparacionFormTab);
+		} catch (IOException e) {
+			System.err.println("Error al abrir la vista de Reparaciones.");
+			e.printStackTrace();
+		}
+    }    
+    
     public void setStatusMessage(StatusMessage statusMessage) {
     	Platform.runLater(() -> {
     		switch(statusMessage.getType()) {

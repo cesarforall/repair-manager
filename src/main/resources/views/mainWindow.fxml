@@ -17,6 +17,7 @@
             <items>
               <MenuItem mnemonicParsing="false" text="Cliente" onAction="#abrirFormCliente" />
               <MenuItem mnemonicParsing="false" text="Dispositivo" onAction="#openDeviceForm" />
+              <MenuItem mnemonicParsing="false" text="Reparación" onAction="#openReparacionForm" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Ver">
