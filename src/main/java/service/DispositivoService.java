@@ -50,7 +50,7 @@ public class DispositivoService {
         }
     }
 
-    public List<Dispositivo> getAll() {
+    public List<Dispositivo> findAll() {
         try {
             return dispositivoDAO.findAll();
         } catch (Exception e) {
