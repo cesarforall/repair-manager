@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -13,9 +14,11 @@ import javafx.util.StringConverter;
 import model.Cliente;
 import model.Dispositivo;
 import model.Estado;
+import model.Reparacion;
 import service.ClienteService;
 import service.DispositivoService;
 import service.EstadoService;
+import service.ReparacionService;
 
 public class ReparacionFormController {
 	@FXML
@@ -34,6 +37,7 @@ public class ReparacionFormController {
 	ClienteService clienteService;
 	DispositivoService dispositivoService;
 	EstadoService estadoService;
+	ReparacionService reparacionService;
 	
 	@FXML
 	public void initialize() {
@@ -46,7 +50,45 @@ public class ReparacionFormController {
 	
 	@FXML
 	public void addReparacion() {
-		return;
+		LocalDate fechaEntrada = fechaEntradaDatePicker.getValue();
+		Dispositivo dispositivo = dispositivoComboBox.getValue();
+		Cliente cliente = clienteComboBox.getValue();
+		Estado estado = estadoComboBox.getValue();
+		String detalle = detalleTextField.getText();
+		
+	    if (fechaEntrada == null) {
+	        messageLabel.setStyle("-fx-text-fill: red;");
+	        messageLabel.setText("El campo \"Fecha de entrada\" es obligatorio.");
+	    } else if (dispositivo == null) {
+	        messageLabel.setStyle("-fx-text-fill: red;");
+	        messageLabel.setText("El campo \"Dispositivo\" es obligatorio.");
+	    } else if (cliente == null) {
+	        messageLabel.setStyle("-fx-text-fill: red;");
+	        messageLabel.setText("El campo \"Número de serie\" es obligatorio.");							
+		} else if (estado == null) {
+	        messageLabel.setStyle("-fx-text-fill: red;");
+	        messageLabel.setText("El campo \"Estado\" es obligatorio.");							
+		} else {
+			
+			try {
+				reparacionService = new ReparacionService();
+				
+				Reparacion reparacion = new Reparacion(dispositivo, cliente, estado, detalle, fechaEntrada.toString(), null, null, 0.0);
+				
+				reparacionService.save(reparacion);
+				messageLabel.setStyle("-fx-text-fill: green;");
+				messageLabel.setText("Reparación añadida correctamente.");
+				
+				fechaEntradaDatePicker.setValue(LocalDate.now());
+	            dispositivoComboBox.setValue(null);
+	            clienteComboBox.setValue(null);
+	            estadoComboBox.setValue(null);
+	            detalleTextField.clear();		
+			} catch (Exception e) {
+				System.err.println("Error en ReparacionFormController al añadir reparación.");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@FXML	
