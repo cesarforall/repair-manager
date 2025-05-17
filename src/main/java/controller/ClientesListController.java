@@ -13,9 +13,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import model.Cliente;
 import service.ClienteService;
+import util.StatusMessage;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -34,6 +36,8 @@ public class ClientesListController {
     Label placeholderLabel;
     
     ObservableList<Cliente> observableClientes;
+    
+    private Consumer<StatusMessage> statusMessageCallback;
 
     private ClienteService clienteService = new ClienteService();
 
@@ -49,6 +53,18 @@ public class ClientesListController {
     	addContextMenu();
     	
     	Platform.runLater(this::cargarClientes);
+    }
+    
+    public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
+    	this.statusMessageCallback = statusMessageCallback;
+    }
+    
+    private void updateStatusMessage(StatusMessage.Type type, String message) {
+    	if (statusMessageCallback != null) {
+    		Platform.runLater(() -> {
+    			statusMessageCallback.accept(new StatusMessage(type, message));
+    		});
+    	}
     }
     
     private void addContextMenu() {

@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import util.StatusMessage;
 
 public class MainWindowController {
 
@@ -26,12 +29,18 @@ public class MainWindowController {
         try {
         	FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/clientesListView.fxml"));
         	Parent tablaClientes = loader.load();
+        	
+        	ClientesListController clientesListController = loader.getController();
+        	clientesListController.setStatusCallback(this::setStatusMessage);
 
             Tab nuevaPestaña = new Tab("Clientes");
             nuevaPestaña.setContent(tablaClientes);
             
             mainTabPanel.getTabs().add(nuevaPestaña);
             mainTabPanel.getSelectionModel().select(nuevaPestaña);
+            
+            
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,5 +140,19 @@ public class MainWindowController {
 			System.err.println("Error al abrir la vista de Estados.");
 			e.printStackTrace();
 		}
+    }
+    
+    public void setStatusMessage(StatusMessage statusMessage) {
+    	Platform.runLater(() -> {
+    		switch(statusMessage.getType()) {
+		        case INFO:
+		            statusMessageLabel.setStyle("-fx-text-fill: black;");
+		            break;
+		        case ERROR:
+		            statusMessageLabel.setStyle("-fx-text-fill: red;");
+		            break;
+    		}
+    	statusMessageLabel.setText(statusMessage.getMessage());
+    	});
     }
 }
