@@ -14,6 +14,7 @@ import model.Cliente;
 import model.Dispositivo;
 import model.Estado;
 import service.ClienteService;
+import service.DispositivoService;
 
 public class ReparacionFormController {
 	@FXML
@@ -30,11 +31,13 @@ public class ReparacionFormController {
 	private Label messageLabel;
 	
 	ClienteService clienteService;
+	DispositivoService dispositivoService;
 	
 	@FXML
 	public void initialize() {
 		fechaEntradaDatePicker.setValue(java.time.LocalDate.now());
 		
+		Platform.runLater(this::updateDispositivoComboBox);		
 		Platform.runLater(this::updateClienteComboBox);		
 	}
 	
@@ -42,6 +45,27 @@ public class ReparacionFormController {
 	public void addReparacion() {
 		return;
 	}
+	
+	@FXML	
+	private void updateDispositivoComboBox() {
+		new Thread(() -> {
+			dispositivoService = new DispositivoService();
+			List<Dispositivo> dispositivos = dispositivoService.findAll();
+			dispositivoComboBox.setItems(FXCollections.observableArrayList(dispositivos));
+			
+			dispositivoComboBox.setConverter(new StringConverter<Dispositivo>() {
+				@Override
+				public String toString(Dispositivo dispositivo) {
+					return dispositivo != null ? dispositivo.toString() : "";
+				}
+
+				@Override
+				public Dispositivo fromString(String string) {
+					return null;
+				}
+			});
+		}).start();		
+	};
 	
 	@FXML	
 	private void updateClienteComboBox() {
