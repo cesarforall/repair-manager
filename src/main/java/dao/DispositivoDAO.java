@@ -20,8 +20,7 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al guardar el dispositivo.");
-			e.printStackTrace();
+			throw new DAOException("Error al guardar el dispositivo en la base de datos.", e);
 		}		
 	}
 
@@ -36,8 +35,7 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al actualizar el dispositivo.");
-            e.printStackTrace();
+			throw new DAOException("Error al modificar el dispositivo en la base de datos.", e);
 		}		
 	}
 
@@ -52,8 +50,7 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al eliminar el dispositivo.");
-			e.printStackTrace();
+			throw new DAOException("Error al eliminar el dispositivo en la base de datos.", e);
 		}		
 	}
 
@@ -63,8 +60,7 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			dispositivo = session.get(Dispositivo.class, id);			
 		} catch (Exception e) {
-			System.err.println("Error al buscar el dispositivo por ID.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar el dispositivo por ID en la base de datos.", e);
 		}
 		return dispositivo;
 	}
@@ -78,8 +74,7 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 			dispositivos = session.createQuery("FROM Dispositivo", Dispositivo.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
-			System.err.println("Error al obtener todos los dispositivos.");
-            e.printStackTrace();
+			throw new DAOException("Error al listar los dispositivos en la base de datos.", e);
 		}		
 		return dispositivos;
 	}
