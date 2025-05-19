@@ -17,8 +17,7 @@ public class DispositivoService {
         try {
             dispositivoDAO.save(dispositivo);
         } catch (Exception e) {
-            System.err.println("Error en DispositivoService al guardar el dispositivo.");
-            e.printStackTrace();
+        	throw new ServiceException("No se pudo completar la creación del dispositivo.", e.getCause());
         }
     }    
 
