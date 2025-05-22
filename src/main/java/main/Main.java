@@ -5,7 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -14,7 +14,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {        	
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/mainWindow.fxml"));
-            AnchorPane root = loader.load();
+            Parent root = loader.load();
 
             Scene scene = new Scene(root);
             primaryStage.setTitle("Vulcano Lite");

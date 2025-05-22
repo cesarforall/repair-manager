@@ -6,45 +6,45 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
-   <children>
-      <MenuBar prefHeight="25.0" prefWidth="640.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="Añadir">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Cliente" onAction="#abrirFormCliente" />
-              <MenuItem mnemonicParsing="false" text="Dispositivo" onAction="#openDeviceForm" />
-              <MenuItem mnemonicParsing="false" text="Reparación" onAction="#openReparacionForm" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Ver">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Clientes" onAction="#abrirClientes"/>
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Gestionar">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Repuestos" onAction="#openRepuestosView"/>
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Configurar">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Estados" onAction="#openEstadosView"/>
-            </items>
-          </Menu>
-        </menus>
+<BorderPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+   <top>
+      <MenuBar>
+         <menus>
+            <Menu text="Archivo">
+               <items>
+                  <MenuItem onAction="#abrirFormCliente" text="Nuevo Cliente" />
+                  <MenuItem onAction="#openDeviceForm" text="Nuevo Dispositivo" />
+                  <MenuItem onAction="#openReparacionForm" text="Nueva Reparación" />
+               </items>
+            </Menu>
+            <Menu text="Ver">
+               <items>
+                  <MenuItem onAction="#abrirClientes" text="Clientes" />
+                  <MenuItem onAction="#openRepuestosView" text="Repuestos" />
+                  <MenuItem onAction="#openEstadosView" text="Estados" />
+               </items>
+            </Menu>
+         </menus>
       </MenuBar>
-      <TabPane fx:id="mainTabPanel" layoutY="25.0" prefHeight="455.0" prefWidth="640.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-      <HBox minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+   </top>
+   <center>
+      <TabPane fx:id="mainTabPanel" />
+   </center>
+   <bottom>
+      <HBox>
          <children>
-            <Label fx:id="statusMessageLabel" prefHeight="25.0">
-               <padding>
-                  <Insets left="5.0" />
-               </padding></Label>
+            <Label fx:id="statusMessageLabel">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
          </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
       </HBox>
-   </children>
-</AnchorPane>
+   </bottom>
+</BorderPane>
