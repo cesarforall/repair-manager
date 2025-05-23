@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,50 +17,63 @@ import util.StatusMessage;
 public class MainWindowController {
 
     @FXML
-    private TabPane mainTabPanel;
+    private TabPane mainTabPane;
+    @FXML
+    private Menu fileMenu;
+    @FXML
+    private Menu viewMenu;
+    
     @FXML
     private Label statusMessageLabel;
     
     @FXML
     public void initialize() {
+    	createMenuItem(fileMenu, "Nuevo Cliente", this::abrirFormCliente);
+    	createMenuItem(fileMenu, "Nuevo Dispositivo", this::openDeviceForm);
+    	createMenuItem(fileMenu, "Nuevo Repuesto", this::openDeviceForm);
+    	createMenuItem(fileMenu, "Nuevo Estado", this::openEstadosView);
+    	createMenuItem(fileMenu, "Nueva Reparación", this::openReparacionForm);
+    	
+    	createMenuItem(viewMenu, "Clientes", this::abrirClientes);
+    	
     	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
     }
 
-    @FXML
     public void abrirClientes() {
     	openTab("Clientes", "/views/clientesView.fxml", true);
     }
     
-    @FXML
     public void abrirFormCliente() {
     	openTab("Nuevo Cliente", "/views/clienteForm.fxml", false);
     }
     
-    @FXML
     public void openDeviceForm() {
     	openTab("Nuevo Dispositivo", "/views/dispositivoForm.fxml", false);
     }        
     
-    @FXML
     public void openRepuestosView() {
     	openTab("Nuevo Repuesto", "/views/repuestosView.fxml", false);
     }
     
-    @FXML
     public void openEstadosView() {
     	openTab("Nuevo Estado", "/views/estadosView.fxml", false);
     }
     
-    @FXML
     public void openReparacionForm() {
     	openTab("Nueva Reparación", "/views/reparacionesFormView.fxml", false);
     }
     
+    private void createMenuItem(Menu menu, String text, Runnable action) {
+    	MenuItem item = new MenuItem(text);
+    	item.setOnAction(e -> action.run());
+    	menu.getItems().add(item);
+    }
+    
     private void openTab(String title, String fxmlPath, boolean allowMultiple) {
     	if (!allowMultiple) {
-    		for (Tab tab : mainTabPanel.getTabs()) {
+    		for (Tab tab : mainTabPane.getTabs()) {
     			if (tab.getText().equals(title)) {
-    				mainTabPanel.getSelectionModel().select(tab);
+    				mainTabPane.getSelectionModel().select(tab);
     			}
     		}
     	}
@@ -70,8 +85,8 @@ public class MainWindowController {
 			Tab newTab = new Tab(title);
 			newTab.setContent(content);
 			
-			mainTabPanel.getTabs().add(newTab);
-			mainTabPanel.getSelectionModel().select(newTab);
+			mainTabPane.getTabs().add(newTab);
+			mainTabPane.getSelectionModel().select(newTab);
 		} catch (Exception e) {
 			System.err.println("Error al abrir la vista " + title);
 			e.printStackTrace();

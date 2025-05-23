@@ -13,25 +13,13 @@
    <top>
       <MenuBar>
          <menus>
-            <Menu text="Archivo">
-               <items>
-                  <MenuItem onAction="#abrirFormCliente" text="Nuevo Cliente" />
-                  <MenuItem onAction="#openDeviceForm" text="Nuevo Dispositivo" />
-                  <MenuItem onAction="#openReparacionForm" text="Nueva Reparación" />
-               </items>
-            </Menu>
-            <Menu text="Ver">
-               <items>
-                  <MenuItem onAction="#abrirClientes" text="Clientes" />
-                  <MenuItem onAction="#openRepuestosView" text="Repuestos" />
-                  <MenuItem onAction="#openEstadosView" text="Estados" />
-               </items>
-            </Menu>
+            <Menu fx:id="fileMenu" text="Archivo" />
+            <Menu fx:id="viewMenu" text="Ver" />
          </menus>
       </MenuBar>
    </top>
    <center>
-      <TabPane fx:id="mainTabPanel" />
+      <TabPane fx:id="mainTabPane" />
    </center>
    <bottom>
       <HBox>
