@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.IOException;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +9,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.cell.PropertyValueFactory;
 import util.StatusMessage;
 
 public class MainWindowController {
@@ -28,22 +25,22 @@ public class MainWindowController {
     
     @FXML
     public void initialize() {
-    	createMenuItem(fileMenu, "Nuevo Cliente", this::abrirFormCliente);
+    	createMenuItem(fileMenu, "Nuevo Cliente", this::openClientForm);
     	createMenuItem(fileMenu, "Nuevo Dispositivo", this::openDeviceForm);
-    	createMenuItem(fileMenu, "Nuevo Repuesto", this::openDeviceForm);
-    	createMenuItem(fileMenu, "Nuevo Estado", this::openEstadosView);
-    	createMenuItem(fileMenu, "Nueva Reparación", this::openReparacionForm);
+    	createMenuItem(fileMenu, "Nuevo Repuesto", this::openPartsView);
+    	createMenuItem(fileMenu, "Nuevo Estado", this::openStatesView);
+    	createMenuItem(fileMenu, "Nueva Reparación", this::openRepairForm);
     	
-    	createMenuItem(viewMenu, "Clientes", this::abrirClientes);
+    	createMenuItem(viewMenu, "Clientes", this::openClientsView);
     	
     	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
     }
 
-    public void abrirClientes() {
+    public void openClientsView() {
     	openTab("Clientes", "/views/clientesView.fxml", true);
     }
     
-    public void abrirFormCliente() {
+    public void openClientForm() {
     	openTab("Nuevo Cliente", "/views/clienteForm.fxml", false);
     }
     
@@ -51,15 +48,15 @@ public class MainWindowController {
     	openTab("Nuevo Dispositivo", "/views/dispositivoForm.fxml", false);
     }        
     
-    public void openRepuestosView() {
+    public void openPartsView() {
     	openTab("Nuevo Repuesto", "/views/repuestosView.fxml", false);
     }
     
-    public void openEstadosView() {
+    public void openStatesView() {
     	openTab("Nuevo Estado", "/views/estadosView.fxml", false);
     }
     
-    public void openReparacionForm() {
+    public void openRepairForm() {
     	openTab("Nueva Reparación", "/views/reparacionesFormView.fxml", false);
     }
     
@@ -74,6 +71,7 @@ public class MainWindowController {
     		for (Tab tab : mainTabPane.getTabs()) {
     			if (tab.getText().equals(title)) {
     				mainTabPane.getSelectionModel().select(tab);
+    				return;
     			}
     		}
     	}
