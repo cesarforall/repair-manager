@@ -13,8 +13,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import model.Cliente;
 import service.ClienteService;
+import util.GenericContextMenuBuilder;
 import util.StatusMessage;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -68,25 +70,14 @@ public class ClientesViewController {
     }
     
     private void addContextMenu() {
-    	tablaClientes.setRowFactory(tableView -> {
-    		TableRow<Cliente> row = new TableRow<Cliente>();
-    		ContextMenu contextMenu = new ContextMenu();
+    	GenericContextMenuBuilder.attach(tablaClientes, cliente -> {
+    		MenuItem ver = new MenuItem("Ver");
+    		ver.setOnAction(e -> seeCliente(cliente));
     		
-    		MenuItem seeItem = new MenuItem("Ver");
-    		seeItem.setOnAction(event -> seeCliente(row.getItem()));
+    		MenuItem eliminar = new MenuItem("Eliminar");
+    		eliminar.setOnAction(e -> deleteCliente(cliente));
     		
-    		MenuItem deleteItem = new MenuItem("Eliminar");
-    		deleteItem.setOnAction(event -> deleteCliente(row.getItem()));
-    		
-    		contextMenu.getItems().addAll(seeItem, deleteItem);
-    		
-    		row.setOnMouseClicked(event -> {
-    			if (!row.isEmpty() && event.getButton() == MouseButton.SECONDARY) {
-    				contextMenu.show(row, event.getScreenX(), event.getScreenY());
-    			}
-    		});
-    		
-    		return row;
+    		return Arrays.asList(ver, eliminar);
     	});
     }
     
