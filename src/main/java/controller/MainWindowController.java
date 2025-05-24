@@ -32,6 +32,7 @@ public class MainWindowController {
     	createMenuItem(fileMenu, "Nueva Reparación", this::openRepairForm);
     	
     	createMenuItem(viewMenu, "Clientes", this::openClientsView);
+    	createMenuItem(viewMenu, "Reparaciones", this::openRepairsView);
     	
     	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
     }
@@ -58,6 +59,10 @@ public class MainWindowController {
     
     public void openRepairForm() {
     	openTab("Nueva Reparación", "/views/reparacionesFormView.fxml", false);
+    }
+    
+    public void openRepairsView() {
+    	openTab("Reparaciones", "/views/repairsView.fxml", true);
     }
     
     private void createMenuItem(Menu menu, String text, Runnable action) {
