@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -35,9 +36,17 @@ public class ClientsViewController {
 
     @FXML
     public void initialize() {
-    	TableColumnBuilder.addColumn(clientsTable, "Id", "IdCliente", 100);
-    	TableColumnBuilder.addColumn(clientsTable, "Nombre", "Nombre", 150);
-    	TableColumnBuilder.addColumn(clientsTable, "Detalle", "Detalle", 200);
+    	TableColumnBuilder.addColumn(clientsTable, "Id", 100, cellData ->
+    		new SimpleObjectProperty<>(cellData.getValue().getIdCliente())
+    	);
+    	
+    	TableColumnBuilder.addColumn(clientsTable, "Nombre", 150, cellData ->
+    		new SimpleObjectProperty<>(cellData.getValue().getNombre())
+    	);
+    	
+    	TableColumnBuilder.addColumn(clientsTable, "Detalle", 200, cellData ->
+			new SimpleObjectProperty<>(cellData.getValue().getDetalle())
+    	);
     	
     	placeholderLabel = new Label("Cargando Clientes...");
     	clientsTable.setPlaceholder(placeholderLabel);
