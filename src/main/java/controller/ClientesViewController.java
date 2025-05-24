@@ -15,6 +15,7 @@ import model.Cliente;
 import service.ClienteService;
 import util.GenericContextMenuBuilder;
 import util.StatusMessage;
+import util.TableColumnBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,9 +46,9 @@ public class ClientesViewController {
 
     @FXML
     public void initialize() {
-    	columnaId.setCellValueFactory(new PropertyValueFactory<>("idCliente"));
-    	columnaNombre.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
-    	columnaDetalle.setCellValueFactory(new PropertyValueFactory<>("Detalle"));
+    	TableColumnBuilder.addColumn(tablaClientes, "Id", "IdCliente", 100);
+    	TableColumnBuilder.addColumn(tablaClientes, "Nombre", "Nombre", 150);
+    	TableColumnBuilder.addColumn(tablaClientes, "Detalle", "Detalle", 200);
     	
     	placeholderLabel = new Label("Cargando Clientes...");
     	tablaClientes.setPlaceholder(placeholderLabel);

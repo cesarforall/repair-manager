@@ -32,12 +32,6 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
-      <TableView fx:id="tablaClientes" VBox.vgrow="ALWAYS">
-         <columns>
-            <TableColumn fx:id="columnaId" prefWidth="100" text="Id" />
-            <TableColumn fx:id="columnaNombre" prefWidth="150" text="Nombre" />
-            <TableColumn fx:id="columnaDetalle" prefWidth="200" text="Detalle" />            
-         </columns>
-      </TableView>
+      <TableView fx:id="tablaClientes" VBox.vgrow="ALWAYS" />
    </children>
 </VBox>
