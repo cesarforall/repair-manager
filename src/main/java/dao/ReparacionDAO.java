@@ -71,16 +71,16 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 
 	@Override
 	public List<Reparacion> findAll() {
-		List<Reparacion> reparacions = null;
+		List<Reparacion> repairs = null;
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			reparacions = session.createQuery("FROM reparacionS", Reparacion.class).getResultList();						
+			repairs = session.createQuery("FROM Reparacion", Reparacion.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
-			System.err.println("Error al obtener todos los reparacions.");
+			System.err.println("Error al obtener todas los reparacions.");
             e.printStackTrace();
 		}		
-		return reparacions;
+		return repairs;
 	}
 }
