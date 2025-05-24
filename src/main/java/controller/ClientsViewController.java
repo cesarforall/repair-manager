@@ -3,14 +3,9 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 import model.Cliente;
 import service.ClienteService;
 import util.GenericContextMenuBuilder;
@@ -26,19 +21,13 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class ClientesViewController {
+public class ClientsViewController {
     @FXML
-    private TableView<Cliente> tablaClientes;
-    @FXML
-    private TableColumn<Cliente, Integer> columnaId;
-    @FXML
-    private TableColumn<Cliente, String> columnaNombre;
-    @FXML
-    private TableColumn<Cliente, String> columnaDetalle;
+    private TableView<Cliente> clientsTable;
     
     Label placeholderLabel;
     
-    ObservableList<Cliente> observableClientes;
+    ObservableList<Cliente> observableClients;
     
     private Consumer<StatusMessage> statusMessageCallback;
 
@@ -46,16 +35,16 @@ public class ClientesViewController {
 
     @FXML
     public void initialize() {
-    	TableColumnBuilder.addColumn(tablaClientes, "Id", "IdCliente", 100);
-    	TableColumnBuilder.addColumn(tablaClientes, "Nombre", "Nombre", 150);
-    	TableColumnBuilder.addColumn(tablaClientes, "Detalle", "Detalle", 200);
+    	TableColumnBuilder.addColumn(clientsTable, "Id", "IdCliente", 100);
+    	TableColumnBuilder.addColumn(clientsTable, "Nombre", "Nombre", 150);
+    	TableColumnBuilder.addColumn(clientsTable, "Detalle", "Detalle", 200);
     	
     	placeholderLabel = new Label("Cargando Clientes...");
-    	tablaClientes.setPlaceholder(placeholderLabel);
+    	clientsTable.setPlaceholder(placeholderLabel);
     	
     	addContextMenu();
     	
-    	Platform.runLater(this::cargarClientes);
+    	Platform.runLater(this::loadClients);
     }
     
     public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
@@ -71,24 +60,24 @@ public class ClientesViewController {
     }
     
     private void addContextMenu() {
-    	GenericContextMenuBuilder.attach(tablaClientes, cliente -> {
-    		MenuItem ver = new MenuItem("Ver");
-    		ver.setOnAction(e -> seeCliente(cliente));
+    	GenericContextMenuBuilder.attach(clientsTable, cliente -> {
+    		MenuItem view = new MenuItem("Ver");
+    		view.setOnAction(e -> viewClient(cliente));
     		
-    		MenuItem eliminar = new MenuItem("Eliminar");
-    		eliminar.setOnAction(e -> deleteCliente(cliente));
+    		MenuItem delete = new MenuItem("Eliminar");
+    		delete.setOnAction(e -> deleteClient(cliente));
     		
-    		return Arrays.asList(ver, eliminar);
+    		return Arrays.asList(view, delete);
     	});
     }
     
-    private void seeCliente(Cliente cliente) {
+    private void viewClient(Cliente cliente) {
     	if (cliente != null) {
     		System.out.println("Ver cliente " + cliente.getNombre());
     	}
     }
     
-    private void deleteCliente(Cliente cliente) {
+    private void deleteClient(Cliente cliente) {
     	if (cliente != null) {
     		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     		alert.setTitle("Confirmación de eliminación");
@@ -100,29 +89,29 @@ public class ClientesViewController {
     			ClienteService clienteService = new ClienteService();
     			clienteService.delete(cliente);
     		}
-    		updateClientes();
+    		refreshClients();
     	}
     }
     
-    private void cargarClientes() {
+    private void loadClients() {
     	new Thread(() -> {
     		try {
 				List<Cliente> clientes = clienteService.findAll();
-				observableClientes = FXCollections.observableArrayList(clientes);
+				observableClients = FXCollections.observableArrayList(clientes);
 				
-				tablaClientes.setItems(observableClientes);
+				clientsTable.setItems(observableClients);
 			} catch (Exception e) {
 				System.err.println("Error en ClientesListController al cargar los Clientes.");
 	            e.printStackTrace();
 	            
 	            placeholderLabel = new Label("Error al cargar los clientes");
-	        	tablaClientes.setPlaceholder(placeholderLabel);
+	        	clientsTable.setPlaceholder(placeholderLabel);
 			}
     	}).start();
     }
     
-    public void updateClientes() {
+    public void refreshClients() {
     	List<Cliente> clientes = clienteService.findAll();
-    	tablaClientes.setItems(FXCollections.observableArrayList(clientes));
+    	clientsTable.setItems(FXCollections.observableArrayList(clientes));
     }
 }
