@@ -114,6 +114,7 @@ public class RepairsViewController {
 	                placeholderLabel = new Label("Error al cargar las reparaciones");
 	                repairsTable.setPlaceholder(placeholderLabel);
 	            });
+	            LoggerUtil.logError(e.getMessage(), e);
 			}
     	}).start();
     }
