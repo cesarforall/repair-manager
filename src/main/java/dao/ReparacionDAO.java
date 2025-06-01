@@ -20,8 +20,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al guardar el reparacion.");
-			e.printStackTrace();
+			throw new DAOException("Error al guardar la reparación.", e);
 		}		
 	}
 
@@ -36,8 +35,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al actualizar el reparacion.");
-            e.printStackTrace();
+			throw new DAOException("Error al actualizar la reparación.", e);
 		}		
 	}
 
@@ -52,8 +50,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al eliminar el reparacion.");
-			e.printStackTrace();
+			throw new DAOException("Error al eliminar la reparación.", e);
 		}		
 	}
 
@@ -63,8 +60,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			reparacion = session.get(Reparacion.class, id);			
 		} catch (Exception e) {
-			System.err.println("Error al buscar el reparacion por ID.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar la reparación por ID.", e);
 		}
 		return reparacion;
 	}
@@ -78,8 +74,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			repairs = session.createQuery("FROM Reparacion", Reparacion.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
-			System.err.println("Error al obtener todas los reparacions.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar todas las reparaciones.", e);
 		}		
 		return repairs;
 	}
