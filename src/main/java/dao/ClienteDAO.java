@@ -20,8 +20,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al guardar el cliente.");
-			e.printStackTrace();
+			throw new DAOException("Error al guardar el cliente.", e);
 		}		
 	}
 
@@ -36,8 +35,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al actualizar el cliente.");
-            e.printStackTrace();
+			throw new DAOException("Error al actualizar el cliente.", e);
 		}		
 	}
 
@@ -52,8 +50,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			System.err.println("Error al eliminar el cliente.");
-			e.printStackTrace();
+			throw new DAOException("Error al eliminar el cliente.", e);
 		}		
 	}
 
@@ -63,8 +60,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			cliente = session.get(Cliente.class, id);			
 		} catch (Exception e) {
-			System.err.println("Error al buscar el cliente por ID.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar el cliente por ID.", e);
 		}
 		return cliente;
 	}
@@ -78,8 +74,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			clientes = session.createQuery("FROM CLIENTES", Cliente.class).getResultList();						
 			transaction.commit();
 		} catch (Exception e) {
-			System.err.println("Error al obtener todos los clientes.");
-            e.printStackTrace();
+			throw new DAOException("Error al obtener todos los clientes.", e);
 		}		
 		return clientes;
 	}
