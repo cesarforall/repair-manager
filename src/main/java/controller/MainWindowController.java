@@ -9,6 +9,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import util.StatusAware;
 import util.StatusMessage;
 
 public class MainWindowController {
@@ -87,6 +88,11 @@ public class MainWindowController {
 			
 			Tab newTab = new Tab(title);
 			newTab.setContent(content);
+			
+			Object controller = loader.getController();
+			if (controller instanceof StatusAware) {
+				((StatusAware) controller).setStatusCallback(this::setStatusMessage);
+			}
 			
 			mainTabPane.getTabs().add(newTab);
 			mainTabPane.getSelectionModel().select(newTab);
