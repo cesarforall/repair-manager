@@ -17,8 +17,7 @@ public class ReparacionService {
         try {
             reparacionDAO.save(Reparacion);
         } catch (Exception e) {
-            System.err.println("Error en ReparacionService al guardar el Reparacion.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en ReparacionService al guardar la reparación.", e);
         }
     }    
 
@@ -26,8 +25,7 @@ public class ReparacionService {
         try {
             reparacionDAO.update(Reparacion);
         } catch (Exception e) {
-            System.err.println("Error en ReparacionService al actualizar el Reparacion.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en ReparacionService al actualizar la reparación.", e);
         }
     }
 
@@ -35,8 +33,7 @@ public class ReparacionService {
         try {
             reparacionDAO.delete(Reparacion);
         } catch (Exception e) {
-            System.err.println("Error en ReparacionService al eliminar la Reparación.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en ReparacionService al eliminar la reparación.", e);
         }
     }
     
@@ -44,9 +41,7 @@ public class ReparacionService {
         try {
             return reparacionDAO.findById(id);
         } catch (Exception e) {
-            System.err.println("Error en ReparacionService al obtener el Reparación.");
-            e.printStackTrace();
-            return null;
+        	throw new ServiceException("Error en ReparacionService al obtener la reparación por ID.", e);
         }
     }
 
@@ -54,9 +49,7 @@ public class ReparacionService {
         try {
             return reparacionDAO.findAll();
         } catch (Exception e) {
-            System.err.println("Error en ReparacionService al obtener todos las Reparaciones.");
-            e.printStackTrace();
-            return null;
+        	throw new ServiceException("Error en ReparacionService al obtener todas las Reparaciones.", e);
         }
     }
 }
