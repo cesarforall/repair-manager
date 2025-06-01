@@ -17,9 +17,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			session.persist(reparacion);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			if (transaction != null) transaction.rollback();
 			throw new DAOException("Error al guardar la reparación.", e);
 		}		
 	}
@@ -32,9 +30,7 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			session.merge(reparacion);
 			transaction.commit();			
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			if (transaction != null) transaction.rollback();
 			throw new DAOException("Error al actualizar la reparación.", e);
 		}		
 	}
@@ -47,35 +43,30 @@ public class ReparacionDAO implements GenericDAO<Reparacion>{
 			session.remove(reparacion);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			if (transaction != null) transaction.rollback();
 			throw new DAOException("Error al eliminar la reparación.", e);
 		}		
 	}
 
 	@Override
 	public Reparacion findById(int id) {
-		Reparacion reparacion = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			reparacion = session.get(Reparacion.class, id);			
+			return session.get(Reparacion.class, id);			
 		} catch (Exception e) {
 			throw new DAOException("Error al buscar la reparación por ID.", e);
 		}
-		return reparacion;
 	}
 
 	@Override
 	public List<Reparacion> findAll() {
-		List<Reparacion> repairs = null;
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			repairs = session.createQuery("FROM Reparacion", Reparacion.class).getResultList();						
+			List<Reparacion> repairs = session.createQuery("FROM Reparacion", Reparacion.class).getResultList();						
 			transaction.commit();
+			return repairs;
 		} catch (Exception e) {
 			throw new DAOException("Error al buscar todas las reparaciones.", e);
 		}		
-		return repairs;
 	}
 }
