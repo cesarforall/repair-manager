@@ -78,4 +78,28 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 		}		
 		return clientes;
 	}
+	
+	public boolean hasPhoneByClient(int clientId) {
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+	        String hql = "SELECT count(t.idTelefono) FROM Telefono t WHERE t.cliente.id = :clientId";
+	        Long count = session.createQuery(hql, Long.class)
+	            .setParameter("clientId", clientId)
+	            .uniqueResult();
+	        return count != null && count > 0;
+	    } catch (Exception e) {
+	        throw new DAOException("Error verificando teléfonos por cliente", e);
+	    }
+	}
+
+	public boolean hasRepairByClient(int clientId) {
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+	        String hql = "SELECT count(r.idReparacion) FROM Reparacion r WHERE r.cliente.id = :clientId";
+	        Long count = session.createQuery(hql, Long.class)
+	            .setParameter("clientId", clientId)
+	            .uniqueResult();
+	        return count != null && count > 0;
+	    } catch (Exception e) {
+	        throw new DAOException("Error verificando reparaciones por cliente", e);
+	    }
+	}
 }
