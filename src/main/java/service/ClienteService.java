@@ -3,9 +3,12 @@ package service;
 import java.util.List;
 
 import dao.ClienteDAO;
+import dao.DAOException;
 import dao.TelefonoDAO;
 import model.Cliente;
 import model.Telefono;
+import util.StatusMessage;
+import util.StatusMessage.Type;
 
 public class ClienteService {
 	private ClienteDAO clienteDAO;
@@ -46,12 +49,16 @@ public class ClienteService {
         }
     }
 
-    public void delete(Cliente cliente) {
+    public StatusMessage delete(Cliente cliente) {
         try {
-            clienteDAO.delete(cliente);
-        } catch (Exception e) {
-            System.err.println("Error en ClienteService al eliminar el cliente.");
-            e.printStackTrace();
+            if (clienteDAO.hasRepairByClient(cliente.getIdCliente())) {
+                return new StatusMessage(Type.ERROR, "Cliente no eliminado: tiene reparaciones asociadas.");
+            } else {
+                clienteDAO.delete(cliente);
+                return new StatusMessage(Type.INFO, "Cliente eliminado correctamente.");
+            }
+        } catch (DAOException e) {
+        	 throw new ServiceException(e.getMessage(), e);
         }
     }
 
