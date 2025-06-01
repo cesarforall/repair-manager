@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import model.Cliente;
 import service.ClienteService;
 import util.GenericContextMenuBuilder;
+import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
 
@@ -22,7 +23,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class ClientsViewController {
+public class ClientsViewController implements StatusAware {
     @FXML
     private TableView<Cliente> clientsTable;
     
@@ -56,14 +57,15 @@ public class ClientsViewController {
     	Platform.runLater(this::loadClients);
     }
     
+    @Override
     public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
     	this.statusMessageCallback = statusMessageCallback;
     }
     
-    private void updateStatusMessage(StatusMessage.Type type, String message) {
+    private void updateStatusMessage(StatusMessage statusMessage) {
     	if (statusMessageCallback != null) {
     		Platform.runLater(() -> {
-    			statusMessageCallback.accept(new StatusMessage(type, message));
+    			statusMessageCallback.accept(new StatusMessage(statusMessage.getType(), statusMessage.getMessage()));
     		});
     	}
     }
@@ -95,10 +97,16 @@ public class ClientsViewController {
     		
     		Optional<ButtonType> result = alert.showAndWait();
     		if (result.isPresent() && result.get() == ButtonType.OK) {
-    			ClienteService clienteService = new ClienteService();
-    			clienteService.delete(cliente);
+    			try {
+    				ClienteService clienteService = new ClienteService();
+        			StatusMessage statusMessage = clienteService.delete(cliente);
+        			updateStatusMessage(statusMessage);
+				} catch (Exception e) {
+					throw new ControllerException(e.getMessage(), e);
+				}
+    			
     		}
-    		refreshClients();
+    		refreshClients();    		
     	}
     }
     
