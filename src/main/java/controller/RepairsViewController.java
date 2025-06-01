@@ -8,7 +8,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import model.Reparacion;
 import service.ReparacionService;
+import service.ServiceException;
 import util.GenericContextMenuBuilder;
+import util.LoggerUtil;
 import util.TableColumnBuilder;
 
 import java.util.Arrays;
@@ -107,12 +109,11 @@ public class RepairsViewController {
 	                    repairsTable.setItems(observableRepairs);
 	                }
 	            });
-			} catch (Exception e) {
-				System.err.println("Error en RepairsViewController al cargar las reparaciones.");
-	            e.printStackTrace();
-	            
-	            placeholderLabel = new Label("Error al cargar las reparaciones");
-	        	repairsTable.setPlaceholder(placeholderLabel);
+			} catch (ServiceException e) {
+	            Platform.runLater(() -> {
+	                placeholderLabel = new Label("Error al cargar las reparaciones");
+	                repairsTable.setPlaceholder(placeholderLabel);
+	            });
 			}
     	}).start();
     }
