@@ -17,11 +17,8 @@ public class RepuestoDAO implements GenericDAO<Repuesto>{
 			session.persist(repuesto);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al guardar el repuesto.");
-			e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al guardar el repuesto.", e);
 		}		
 	}
 
@@ -33,11 +30,8 @@ public class RepuestoDAO implements GenericDAO<Repuesto>{
 			session.merge(repuesto);
 			transaction.commit();			
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al actualizar el repuesto.");
-            e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al actualizar el repuesto.", e);
 		}		
 	}
 
@@ -49,38 +43,30 @@ public class RepuestoDAO implements GenericDAO<Repuesto>{
 			session.remove(repuesto);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al eliminar el repuesto.");
-			e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al eliminar el repuesto.", e);
 		}		
 	}
 
 	@Override
 	public Repuesto findById(int id) {
-		Repuesto repuesto = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			repuesto = session.get(Repuesto.class, id);			
+			return session.get(Repuesto.class, id);			
 		} catch (Exception e) {
-			System.err.println("Error al buscar el repuesto por ID.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar el repuesto por ID.", e);
 		}
-		return repuesto;
 	}
 
 	@Override
 	public List<Repuesto> findAll() {
-		List<Repuesto> repuestos = null;
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			repuestos = session.createQuery("FROM Repuesto", Repuesto.class).getResultList();						
+			List<Repuesto> repuestos = session.createQuery("FROM Repuesto", Repuesto.class).getResultList();						
 			transaction.commit();
+			return repuestos;
 		} catch (Exception e) {
-			System.err.println("Error al obtener todos los repuestos.");
-            e.printStackTrace();
+			throw new DAOException("Error al obtener todos los repuestos.", e);
 		}		
-		return repuestos;
 	}
 }

@@ -17,11 +17,8 @@ public class EstadoDAO implements GenericDAO<Estado>{
 			session.persist(estado);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al guardar el estado.");
-			e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al guardar el estado.", e);
 		}		
 	}
 
@@ -33,11 +30,8 @@ public class EstadoDAO implements GenericDAO<Estado>{
 			session.merge(estado);
 			transaction.commit();			
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al actualizar el estado.");
-            e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al actualizar el estado.", e);
 		}		
 	}
 
@@ -49,38 +43,30 @@ public class EstadoDAO implements GenericDAO<Estado>{
 			session.remove(estado);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al eliminar el estado.");
-			e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al eliminar el estado.", e);
 		}		
 	}
 
 	@Override
 	public Estado findById(int id) {
-		Estado estado = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			estado = session.get(Estado.class, id);			
+			return session.get(Estado.class, id);			
 		} catch (Exception e) {
-			System.err.println("Error al buscar el estado por ID.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar el estado por ID.", e);
 		}
-		return estado;
 	}
 
 	@Override
 	public List<Estado> findAll() {
-		List<Estado> estados = null;
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			estados = session.createQuery("FROM Estado", Estado.class).getResultList();						
+			List<Estado> estados = session.createQuery("FROM Estado", Estado.class).getResultList();						
 			transaction.commit();
+			return estados;
 		} catch (Exception e) {
-			System.err.println("Error al obtener todos los estados.");
-            e.printStackTrace();
+            throw new DAOException("Error al obtener todos los estados.", e);
 		}		
-		return estados;
 	}
 }

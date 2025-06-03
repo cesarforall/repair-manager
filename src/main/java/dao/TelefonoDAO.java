@@ -17,11 +17,8 @@ public class TelefonoDAO implements GenericDAO<Telefono>{
 			session.persist(telefono);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al guardar el teléfono.");
-			e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al guardar el teléfono.", e);
 		}		
 	}
 
@@ -33,11 +30,8 @@ public class TelefonoDAO implements GenericDAO<Telefono>{
 			session.merge(telefono);
 			transaction.commit();			
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al actualizar el teléfono.");
-            e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al actualizar el teléfono.", e);
 		}		
 	}
 
@@ -49,38 +43,30 @@ public class TelefonoDAO implements GenericDAO<Telefono>{
 			session.remove(telefono);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			System.err.println("Error al eliminar el teléfono.");
-			e.printStackTrace();
+			if (transaction != null) transaction.rollback();
+			throw new DAOException("Error al eliminar el teléfono.", e);
 		}		
 	}
 
 	@Override
 	public Telefono findById(int id) {
-		Telefono telefono = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			telefono = session.get(Telefono.class, id);			
+			return session.get(Telefono.class, id);			
 		} catch (Exception e) {
-			System.err.println("Error al buscar el teléfono por ID.");
-            e.printStackTrace();
+			throw new DAOException("Error al buscar el teléfono por ID.", e);
 		}
-		return telefono;
 	}
 
 	@Override
 	public List<Telefono> findAll() {
-		List<Telefono> telefonos = null;
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			telefonos = session.createQuery("FROM TELEFONOS", Telefono.class).getResultList();						
+			List<Telefono> telefonos = session.createQuery("FROM TELEFONOS", Telefono.class).getResultList();						
 			transaction.commit();
+			return telefonos;
 		} catch (Exception e) {
-			System.err.println("Error al obtener todos los teléfonos.");
-            e.printStackTrace();
+			throw new DAOException("Error al obtener todos los teléfonos.", e);
 		}		
-		return telefonos;
 	}
 }
