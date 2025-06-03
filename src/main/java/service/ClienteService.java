@@ -23,8 +23,7 @@ public class ClienteService {
         try {
             clienteDAO.save(cliente);
         } catch (Exception e) {
-            System.err.println("Error en ClienteService al guardar el cliente.");
-            e.printStackTrace();
+            throw new ServiceException("Error en ClienteService al guardar el cliente.", e);
         }
     }
     
@@ -35,8 +34,7 @@ public class ClienteService {
                 telefonoDAO.save(telefono);
             }
         } catch (Exception e) {
-            System.err.println("Error en ClienteService al guardar el cliente con teléfono.");
-            e.printStackTrace();
+            throw new ServiceException("Error en ClienteService al guardar el cliente con teléfono.", e);
         }
     }
 
@@ -44,8 +42,7 @@ public class ClienteService {
         try {
             clienteDAO.update(cliente);
         } catch (Exception e) {
-            System.err.println("Error en ClienteService al actualizar el cliente.");
-            e.printStackTrace();
+            throw new ServiceException("Error en ClienteService al actualizar el cliente.", e);
         }
     }
 
@@ -66,9 +63,7 @@ public class ClienteService {
         try {
             return clienteDAO.findById(id);
         } catch (Exception e) {
-            System.err.println("Error en ClienteService al buscar el cliente por ID.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en ClienteService al buscar el cliente por ID.", e);
         }
     }
 
@@ -76,9 +71,7 @@ public class ClienteService {
         try {
             return clienteDAO.findAll();
         } catch (Exception e) {
-            System.err.println("Error en ClienteService al obtener todos los clientes.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en ClienteService al obtener todos los clientes.", e);
         }
     }
 }

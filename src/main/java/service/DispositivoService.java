@@ -25,8 +25,7 @@ public class DispositivoService {
         try {
             dispositivoDAO.update(dispositivo);
         } catch (Exception e) {
-            System.err.println("Error en DispositivoService al actualizar el dispositivo.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en DispositivoService al actualizar el dispositivo.", e);
         }
     }
 
@@ -34,8 +33,7 @@ public class DispositivoService {
         try {
             dispositivoDAO.delete(dispositivo);
         } catch (Exception e) {
-            System.err.println("Error en DispositivoService al eliminar el dispositivo.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en DispositivoService al eliminar el dispositivo.", e);
         }
     }
     
@@ -43,9 +41,7 @@ public class DispositivoService {
         try {
             return dispositivoDAO.findById(id);
         } catch (Exception e) {
-            System.err.println("Error en DispositivoService al obtener el dispositivo.");
-            e.printStackTrace();
-            return null;
+        	throw new ServiceException("Error en DispositivoService al obtener el dispositivo.", e);
         }
     }
 
@@ -53,9 +49,7 @@ public class DispositivoService {
         try {
             return dispositivoDAO.findAll();
         } catch (Exception e) {
-            System.err.println("Error en DispositivoService al obtener todos los dispositivos.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en DispositivoService al obtener todos los dispositivos.", e);
         }
     }
 }

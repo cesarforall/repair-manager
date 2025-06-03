@@ -17,8 +17,7 @@ public class TelefonoService {
         try {
             telefonoDAO.save(telefono);
         } catch (Exception e) {
-            System.err.println("Error en TelefonoService al guardar el teléfono.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en TelefonoService al guardar el teléfono.", e);
         }
     }    
 
@@ -26,8 +25,7 @@ public class TelefonoService {
         try {
             telefonoDAO.update(telefono);
         } catch (Exception e) {
-            System.err.println("Error en TelefonoService al actualizar el teléfono.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en TelefonoService al actualizar el teléfono.", e);
         }
     }
 
@@ -35,8 +33,7 @@ public class TelefonoService {
         try {
             telefonoDAO.delete(telefono);
         } catch (Exception e) {
-            System.err.println("Error en TelefonoService al eliminar el teléfono.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en TelefonoService al eliminar el teléfono.", e);
         }
     }
     
@@ -44,9 +41,7 @@ public class TelefonoService {
         try {
             return telefonoDAO.findById(id);
         } catch (Exception e) {
-            System.err.println("Error en TelefonoService al obtener el teléfono.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en TelefonoService al obtener el teléfono.", e);
         }
     }
 
@@ -54,9 +49,7 @@ public class TelefonoService {
         try {
             return telefonoDAO.findAll();
         } catch (Exception e) {
-            System.err.println("Error en TelefonoService al obtener todos los teléfonos.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en TelefonoService al obtener todos los teléfonos.", e);
         }
     }
 }

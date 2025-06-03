@@ -17,8 +17,7 @@ public class EstadoService {
         try {
             EstadoDAO.save(Estado);
         } catch (Exception e) {
-            System.err.println("Error en EstadoService al guardar el estado.");
-            e.printStackTrace();
+            throw new ServiceException("Error en EstadoService al guardar el estado.", e);
         }
     }    
 
@@ -26,8 +25,7 @@ public class EstadoService {
         try {
             EstadoDAO.update(Estado);
         } catch (Exception e) {
-            System.err.println("Error en EstadoService al actualizar el estado.");
-            e.printStackTrace();
+            throw new ServiceException("Error en EstadoService al actualizar el estado.", e);
         }
     }
 
@@ -35,8 +33,7 @@ public class EstadoService {
         try {
             EstadoDAO.delete(Estado);
         } catch (Exception e) {
-            System.err.println("Error en EstadoService al eliminar el estado.");
-            e.printStackTrace();
+        	throw new ServiceException("Error en EstadoService al eliminar el estado.", e);
         }
     }
     
@@ -44,9 +41,7 @@ public class EstadoService {
         try {
             return EstadoDAO.findById(id);
         } catch (Exception e) {
-            System.err.println("Error en EstadoService al obtener el estado.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en EstadoService al obtener el estado.", e);
         }
     }
 
@@ -54,9 +49,7 @@ public class EstadoService {
         try {
             return EstadoDAO.findAll();
         } catch (Exception e) {
-            System.err.println("Error en EstadoService al obtener todos los estados.");
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("Error en EstadoService al obtener todos los estados.", e);
         }
     }
 }
