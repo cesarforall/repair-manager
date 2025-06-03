@@ -6,7 +6,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReparacionFormController">
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReparacionFormController">
    <children>
-      <VBox prefHeight="320.0" prefWidth="320.0">
+      <VBox spacing="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT">
                <children>
                   <Label text="Añadir reparación">
                      <font>
@@ -29,8 +28,9 @@
             </HBox>
             <GridPane vgap="5.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="120.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="150.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -40,24 +40,27 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Fecha de entrada" />
-                  <DatePicker fx:id="fechaEntradaDatePicker" GridPane.columnIndex="1" />
+                  <Label text="Fecha de entrada:" />
+                  <DatePicker fx:id="fechaEntradaDatePicker" prefWidth="150.0" GridPane.columnIndex="1" />
                   <Label text="Dispositivo:" GridPane.rowIndex="1" />
                   <ComboBox fx:id="dispositivoComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button onAction="#updateDispositivoComboBox" text="Refrescar" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label text="Cliente:" GridPane.rowIndex="2" />
                   <ComboBox fx:id="clienteComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button onAction="#updateClienteComboBox" text="Refrescar" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <Label text="Estado:" GridPane.rowIndex="3" />
                   <ComboBox fx:id="estadoComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button onAction="#updateEstadoComboBox" text="Refrescar" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                   <Label text="Detalle:" GridPane.rowIndex="4" />
                   <TextField fx:id="detalleTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT">
                <children>
                   <Label fx:id="messageLabel" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0">
+            <HBox alignment="CENTER_LEFT">
                <children>
                   <Button mnemonicParsing="false" onAction="#addReparacion" text="Añadir" />
                </children>
@@ -68,4 +71,4 @@
          </padding>
       </VBox>
    </children>
-</AnchorPane>
+</VBox>

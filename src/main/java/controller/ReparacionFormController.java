@@ -43,9 +43,7 @@ public class ReparacionFormController {
 	public void initialize() {
 		fechaEntradaDatePicker.setValue(java.time.LocalDate.now());
 		
-		Platform.runLater(this::updateDispositivoComboBox);		
-		Platform.runLater(this::updateClienteComboBox);
-		Platform.runLater(this::updateEstadoComboBox);
+		Platform.runLater(this::loadData);	
 	}
 	
 	@FXML
@@ -64,7 +62,7 @@ public class ReparacionFormController {
 	        messageLabel.setText("El campo \"Dispositivo\" es obligatorio.");
 	    } else if (cliente == null) {
 	        messageLabel.setStyle("-fx-text-fill: red;");
-	        messageLabel.setText("El campo \"Número de serie\" es obligatorio.");							
+	        messageLabel.setText("El campo \"Cliente\" es obligatorio.");							
 		} else if (estado == null) {
 	        messageLabel.setStyle("-fx-text-fill: red;");
 	        messageLabel.setText("El campo \"Estado\" es obligatorio.");							
@@ -96,61 +94,75 @@ public class ReparacionFormController {
 		new Thread(() -> {
 			dispositivoService = new DispositivoService();
 			List<Dispositivo> dispositivos = dispositivoService.findAll();
-			dispositivoComboBox.setItems(FXCollections.observableArrayList(dispositivos));
-			
-			dispositivoComboBox.setConverter(new StringConverter<Dispositivo>() {
-				@Override
-				public String toString(Dispositivo dispositivo) {
-					return dispositivo != null ? dispositivo.toString() : "";
-				}
 
-				@Override
-				public Dispositivo fromString(String string) {
-					return null;
-				}
+			Platform.runLater(() -> {
+				dispositivoComboBox.setItems(FXCollections.observableArrayList(dispositivos));
+				dispositivoComboBox.setConverter(new StringConverter<Dispositivo>() {
+					@Override
+					public String toString(Dispositivo dispositivo) {
+						return dispositivo != null ? dispositivo.toString() : "";
+					}
+
+					@Override
+					public Dispositivo fromString(String string) {
+						return null;
+					}
+				});
 			});
-		}).start();		
-	};
+		}).start();
+	}
 	
 	@FXML	
 	private void updateClienteComboBox() {
 		new Thread(() -> {
 			clienteService = new ClienteService();
 			List<Cliente> clientes = clienteService.findAll();
-			clienteComboBox.setItems(FXCollections.observableArrayList(clientes));
-			
-			clienteComboBox.setConverter(new StringConverter<Cliente>() {
-				@Override
-				public String toString(Cliente cliente) {
-					return cliente != null ? cliente.toString() : "";
-				}
 
-				@Override
-				public Cliente fromString(String string) {
-					return null;
-				}
+			Platform.runLater(() -> {
+				clienteComboBox.setItems(FXCollections.observableArrayList(clientes));
+				clienteComboBox.setConverter(new StringConverter<Cliente>() {
+					@Override
+					public String toString(Cliente cliente) {
+						return cliente != null ? cliente.toString() : "";
+					}
+
+					@Override
+					public Cliente fromString(String string) {
+						return null;
+					}
+				});
 			});
-		}).start();		
-	};
+		}).start();
+	}
 	
 	@FXML	
 	private void updateEstadoComboBox() {
 		new Thread(() -> {
 			estadoService = new EstadoService();
 			List<Estado> estados = estadoService.findAll();
-			estadoComboBox.setItems(FXCollections.observableArrayList(estados));
-			
-			estadoComboBox.setConverter(new StringConverter<Estado>() {
-				@Override
-				public String toString(Estado estado) {
-					return estado != null ? estado.toString() : "";
-				}
 
-				@Override
-				public Estado fromString(String string) {
-					return null;
-				}
+			Platform.runLater(() -> {
+				estadoComboBox.setItems(FXCollections.observableArrayList(estados));
+				estadoComboBox.setConverter(new StringConverter<Estado>() {
+					@Override
+					public String toString(Estado estado) {
+						return estado != null ? estado.toString() : "";
+					}
+
+					@Override
+					public Estado fromString(String string) {
+						return null;
+					}
+				});
 			});
-		}).start();		
-	};
+		}).start();
+	}
+	
+	private void loadData() {
+		Platform.runLater(() -> {
+			updateDispositivoComboBox();
+			updateClienteComboBox();
+			updateEstadoComboBox();
+		});
+	}
 }
