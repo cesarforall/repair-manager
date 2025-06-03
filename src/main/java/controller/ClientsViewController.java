@@ -8,7 +8,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import model.Cliente;
 import service.ClienteService;
+import service.ServiceException;
 import util.GenericContextMenuBuilder;
+import util.LoggerUtil;
 import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
@@ -116,13 +118,20 @@ public class ClientsViewController implements StatusAware {
 				List<Cliente> clientes = clienteService.findAll();
 				observableClients = FXCollections.observableArrayList(clientes);
 				
-				clientsTable.setItems(observableClients);
-			} catch (Exception e) {
-				System.err.println("Error en ClientesListController al cargar los Clientes.");
-	            e.printStackTrace();
-	            
-	            placeholderLabel = new Label("Error al cargar los clientes");
-	        	clientsTable.setPlaceholder(placeholderLabel);
+				Platform.runLater(() -> {
+	                if (clientes == null || clientes.isEmpty()) {
+	                    clientsTable.setPlaceholder(new Label("No se encontraron clientes en la base de datos."));
+	                    clientsTable.getItems().clear();
+	                } else {
+	                    clientsTable.setItems(observableClients);
+	                }
+	            });
+			} catch (ServiceException e) {
+				Platform.runLater(() -> {
+					placeholderLabel = new Label("Error al cargar los clientes");
+		        	clientsTable.setPlaceholder(placeholderLabel);
+				});
+				LoggerUtil.logError(e.getMessage(), e);
 			}
     	}).start();
     }
@@ -130,5 +139,9 @@ public class ClientsViewController implements StatusAware {
     public void refreshClients() {
     	List<Cliente> clientes = clienteService.findAll();
     	clientsTable.setItems(FXCollections.observableArrayList(clientes));
+    	
+    	if (clientes == null || clientes.isEmpty()) {
+            clientsTable.setPlaceholder(new Label("No se encontraron clientes en la base de datos."));
+        }
     }
 }
