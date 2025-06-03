@@ -17,9 +17,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			session.persist(cliente);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			if (transaction != null) transaction.rollback();
 			throw new DAOException("Error al guardar el cliente.", e);
 		}		
 	}
@@ -32,9 +30,7 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			session.merge(cliente);
 			transaction.commit();			
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			if (transaction != null) transaction.rollback();
 			throw new DAOException("Error al actualizar el cliente.", e);
 		}		
 	}
@@ -47,36 +43,31 @@ public class ClienteDAO implements GenericDAO<Cliente>{
 			session.remove(cliente);			
 			transaction.commit();
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
+			if (transaction != null) transaction.rollback();
 			throw new DAOException("Error al eliminar el cliente.", e);
 		}		
 	}
 
 	@Override
 	public Cliente findById(int id) {
-		Cliente cliente = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			cliente = session.get(Cliente.class, id);			
+			return session.get(Cliente.class, id);			
 		} catch (Exception e) {
 			throw new DAOException("Error al buscar el cliente por ID.", e);
 		}
-		return cliente;
 	}
 
 	@Override
 	public List<Cliente> findAll() {
-		List<Cliente> clientes = null;
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			clientes = session.createQuery("FROM CLIENTES", Cliente.class).getResultList();						
+			List<Cliente> clientes = session.createQuery("FROM CLIENTES", Cliente.class).getResultList();						
 			transaction.commit();
+			return clientes;
 		} catch (Exception e) {
 			throw new DAOException("Error al obtener todos los clientes.", e);
 		}		
-		return clientes;
 	}
 	
 	public boolean hasPhoneByClient(int clientId) {
