@@ -29,11 +29,12 @@ public class MainWindowController {
     	createMenuItem(fileMenu, "Nuevo Cliente", this::openClientForm);
     	createMenuItem(fileMenu, "Nuevo Dispositivo", this::openDeviceForm);
     	createMenuItem(fileMenu, "Nuevo Repuesto", this::openPartForm);
-    	createMenuItem(fileMenu, "Nuevo Estado", this::openStatesView);
+    	createMenuItem(fileMenu, "Nuevo Estado", this::openStateForm);
     	createMenuItem(fileMenu, "Nueva Reparación", this::openRepairForm);
     	
     	createMenuItem(viewMenu, "Clientes", this::openClientsView);
     	createMenuItem(viewMenu, "Repuestos", this::openPartsView);
+    	createMenuItem(viewMenu, "Estados", this::openStatesView);
     	createMenuItem(viewMenu, "Reparaciones", this::openRepairsView);
     	
     	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
@@ -56,7 +57,7 @@ public class MainWindowController {
     }
     
     public void openStatesView() {
-    	openTab("Nuevo Estado", "/views/estadosView.fxml", false);
+    	openTab("Estados", "/views/estadosView.fxml", true);
     }
     
     public void openRepairForm() {
@@ -69,6 +70,10 @@ public class MainWindowController {
     
     public void openPartForm() {
     	openTab("Nuevo Repuesto", "/views/partForm.fxml", false);
+    }
+    
+    public void openStateForm() {
+    	openTab("Nuevo Estado", "/views/stateForm.fxml", false);
     }
     
     private void createMenuItem(Menu menu, String text, Runnable action) {

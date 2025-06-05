@@ -1,75 +1,106 @@
 package controller;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import model.Estado;
 import service.EstadoService;
+import service.ServiceException;
+import util.GenericContextMenuBuilder;
+import util.LoggerUtil;
+import util.StatusAware;
+import util.StatusMessage;
+import util.TableColumnBuilder;
+import util.StatusMessage.Type;
 
-public class EstadosViewController {
+public class EstadosViewController implements StatusAware {
 	@FXML
-	private TextField nameTextField;
-	@FXML
-	private TextField descriptionTextField;
-	@FXML
-	private Label messageLabel;
-    @FXML
     private TableView<Estado> estadosTable;
-    @FXML
-    private TableColumn<Estado, String> nombreColumn;
-    @FXML
-    private TableColumn<Estado, String> descripcionColumn;
+	
+	Label placeholderLabel;
+	
+	private Consumer<StatusMessage> statusMessageCallback;
 	
 	EstadoService estadoService = new EstadoService();
 	
 	@FXML
     public void initialize() {
-    	nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-    	descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-    	
-    	Label placeholderLabel = new Label("Cargando Estados...");
-    	placeholderLabel.setTranslateY(-150);
+    	TableColumnBuilder.addColumn(estadosTable, "Id", 80, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getIdEstado()));
+		
+		TableColumnBuilder.addColumn(estadosTable, "Nombre", 200, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getNombre()));
+		
+		TableColumnBuilder.addColumn(estadosTable, "Descripción", 200, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getDescripcion()));
+		    	
+    	placeholderLabel = new Label("Cargando Estados...");
     	estadosTable.setPlaceholder(placeholderLabel);
+    	
+    	addContextMenu();
     	
     	// Carga los Estados en el hilo de JavaFX después de que la interfaz esté lista
     	Platform.runLater(this::loadEstados);
     }
 	
-	public void addEstado() {
-		String estadoName = nameTextField.getText();
-		String descriptionText = descriptionTextField.getText();
-		
-	    if (estadoName == null || estadoName.trim().isEmpty()) {
-	        messageLabel.setStyle("-fx-text-fill: red;");
-	        messageLabel.setText("El campo \"Nombre\" es obligatorio.");
-	    } else if (descriptionText == null || descriptionText.trim().isEmpty()) {
-	        messageLabel.setStyle("-fx-text-fill: red;");
-	        messageLabel.setText("El campo \"Descripción\" es obligatorio."); 
-	    } else {						
-			try {
-				Estado estado = new Estado(estadoName, descriptionText);
-				
-				estadoService.save(estado);
-				messageLabel.setStyle("-fx-text-fill: green;");
-				messageLabel.setText("Estado \"" + estadoName + "\" añadido correctamente.");
-				nameTextField.setText(null);
-				descriptionTextField.setText(null);
-				
-				refreshEstados();
-			} catch (Exception e) {
-				System.err.println("Error en EstadosController al añadir Estado.");
-				e.printStackTrace();
-			}
-		}
-	}
+	@Override
+    public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
+    	this.statusMessageCallback = statusMessageCallback;
+    }
+    
+    private void updateStatusMessage(StatusMessage statusMessage) {
+    	if (statusMessageCallback != null) {
+    		Platform.runLater(() -> {
+    			statusMessageCallback.accept(new StatusMessage(statusMessage.getType(), statusMessage.getMessage()));
+    		});
+    	}
+    }
+	
+    private void addContextMenu() {
+    	GenericContextMenuBuilder.attach(estadosTable, estado -> {
+    		MenuItem delete = new MenuItem("Eliminar");
+    		delete.setOnAction(e -> deleteState(estado));
+    		
+    		return Arrays.asList(delete);
+    	});
+    }
+	
+	private void deleteState(Estado estado) {
+    	if (estado != null) {
+    		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmación de eliminación");
+    		alert.setHeaderText("¿Seguro que deseas eliminar \"" + estado.getNombre() + "\"?");
+    		alert.setContentText("Esta opción no se puede deshacer");
+    		
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if (result.isPresent() && result.get() == ButtonType.OK) {
+    			try {
+    				EstadoService estadoService = new EstadoService();
+    				estadoService.delete(estado);
+    				
+        			updateStatusMessage(new StatusMessage(Type.INFO, "Se ha eliminado " + estado.getNombre() + "."));
+				} catch (ServiceException e) {
+					Platform.runLater(() -> {
+						updateStatusMessage(new StatusMessage(Type.ERROR, "Se ha producido un error al eliminar el estado."));						
+					});
+					LoggerUtil.logError(e.getMessage(), e);
+				}    			
+    		}
+    		refreshEstados();    		
+    	}
+    }
 	
     private void loadEstados() {
     	new Thread(() -> {
@@ -78,27 +109,30 @@ public class EstadosViewController {
             	ObservableList<Estado> observableEstados = FXCollections.observableArrayList(estados);
             	        	
             	Platform.runLater(() -> {
-            		if (observableEstados.isEmpty()) {
-    					estadosTable.setPlaceholder(null);
+            		if (estados == null || estados.isEmpty()) {
+    					estadosTable.setPlaceholder(new Label("No se encontraron estados en la base de datos."));
+    					estadosTable.getItems().clear();
     				} else {
     					estadosTable.setItems(observableEstados);
-    				}        		
+    				}         		
             	});
-			} catch (Exception e) {
-				System.err.println("Error en EstadosController al cargar los Estados.");
-	            e.printStackTrace();
-
-	            Platform.runLater(() -> {
-	                messageLabel.setStyle("-fx-text-fill: red;");
-	                messageLabel.setText("Error al cargar los estados.");
+			} catch (ServiceException e) {
+				Platform.runLater(() -> {
+					placeholderLabel = new Label("Error al cargar los estados.");
+		        	estadosTable.setPlaceholder(placeholderLabel);
 	            });
 			}
     		
     	}).start();    	
     }
     
+    @FXML
     private void refreshEstados() {
     	List<Estado> estados = estadoService.findAll();
     	estadosTable.setItems(FXCollections.observableArrayList(estados));
+    	
+    	if (estados == null || estados.isEmpty()) {
+            estadosTable.setPlaceholder(new Label("No se encontraron estados en la base de datos."));
+        }
     }
 }
