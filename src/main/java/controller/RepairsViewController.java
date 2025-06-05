@@ -103,7 +103,7 @@ public class RepairsViewController {
 				
 				Platform.runLater(() -> {
 	                if (repairs == null || repairs.isEmpty()) {
-	                    repairsTable.setPlaceholder(new Label("No hay reparaciones."));
+	                    repairsTable.setPlaceholder(new Label("No se encontraron reparaciones en la base de datos."));
 	                    repairsTable.getItems().clear();
 	                } else {
 	                    repairsTable.setItems(observableRepairs);
@@ -122,5 +122,9 @@ public class RepairsViewController {
     public void refreshRepairs() {
     	List<Reparacion> repairs = ReparacionService.findAll();
     	repairsTable.setItems(FXCollections.observableArrayList(repairs));
+    	
+    	if (repairs == null || repairs.isEmpty()) {
+            repairsTable.setPlaceholder(new Label("No se encontraron reparaciones en la base de datos."));
+        }
     }
 }
