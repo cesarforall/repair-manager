@@ -33,6 +33,7 @@ public class MainWindowController {
     	createMenuItem(fileMenu, "Nueva Reparación", this::openRepairForm);
     	
     	createMenuItem(viewMenu, "Clientes", this::openClientsView);
+    	createMenuItem(viewMenu, "Dispositivos", this::openDevicesView);
     	createMenuItem(viewMenu, "Repuestos", this::openPartsView);
     	createMenuItem(viewMenu, "Estados", this::openStatesView);
     	createMenuItem(viewMenu, "Reparaciones", this::openRepairsView);
@@ -74,6 +75,10 @@ public class MainWindowController {
     
     public void openStateForm() {
     	openTab("Nuevo Estado", "/views/stateForm.fxml", false);
+    }
+    
+    public void openDevicesView() {
+    	openTab("Dispositivos", "/views/devicesView.fxml", true);
     }
     
     private void createMenuItem(Menu menu, String text, Runnable action) {
