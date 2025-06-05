@@ -41,44 +41,36 @@ public class MainWindowController {
     	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
     }
 
-    public void openClientsView() {
-    	openTab("Clientes", "/views/clientesView.fxml", true);
-    }
-    
     public void openClientForm() {
     	openTab("Nuevo Cliente", "/views/clienteForm.fxml", false);
     }
-    
     public void openDeviceForm() {
     	openTab("Nuevo Dispositivo", "/views/dispositivoForm.fxml", false);
     }        
-    
-    public void openPartsView() {
-    	openTab("Repuestos", "/views/repuestosView.fxml", true);
+    public void openPartForm() {
+    	openTab("Nuevo Repuesto", "/views/partForm.fxml", false);
     }
-    
-    public void openStatesView() {
-    	openTab("Estados", "/views/estadosView.fxml", true);
+    public void openStateForm() {
+    	openTab("Nuevo Estado", "/views/stateForm.fxml", false);
     }
-    
     public void openRepairForm() {
     	openTab("Nueva Reparación", "/views/reparacionesFormView.fxml", false);
     }
     
-    public void openRepairsView() {
-    	openTab("Reparaciones", "/views/repairsView.fxml", true);
+    public void openClientsView() {
+    	openTab("Clientes", "/views/clientesView.fxml", true);
     }
-    
-    public void openPartForm() {
-    	openTab("Nuevo Repuesto", "/views/partForm.fxml", false);
-    }
-    
-    public void openStateForm() {
-    	openTab("Nuevo Estado", "/views/stateForm.fxml", false);
-    }
-    
     public void openDevicesView() {
     	openTab("Dispositivos", "/views/devicesView.fxml", true);
+    }
+    public void openPartsView() {
+    	openTab("Repuestos", "/views/repuestosView.fxml", true);
+    }
+    public void openStatesView() {
+    	openTab("Estados", "/views/estadosView.fxml", true);
+    }
+    public void openRepairsView() {
+    	openTab("Reparaciones", "/views/repairsView.fxml", true);
     }
     
     private void createMenuItem(Menu menu, String text, Runnable action) {
