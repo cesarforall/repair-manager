@@ -23,6 +23,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class RepairsViewController {
+	private MainWindowController mainWindowController;
+	
     @FXML
     private TableView<Reparacion> repairsTable;
     
@@ -70,13 +72,31 @@ public class RepairsViewController {
     	Platform.runLater(this::loadRepairs);
     }
     
+    public void setMainWindowController(MainWindowController mainWindowController) {
+    	this.mainWindowController = mainWindowController;
+    }
+    
     private void addContextMenu() {
     	GenericContextMenuBuilder.attach(repairsTable, repair -> {
     		MenuItem delete = new MenuItem("Eliminar");
     		delete.setOnAction(e -> deleteRepair(repair));
     		
-    		return Arrays.asList(delete);
+    		MenuItem view = new MenuItem("Ver");
+    		view.setOnAction(e -> openRepairTab(repair));
+    		
+    		return Arrays.asList(delete, view);
     	});
+    }
+    
+    private void openRepairTab(Reparacion reparacion) {
+    	String repairId = "R" + Integer.toString(reparacion.getIdReparacion());
+    	try {
+    		String fxmlPath = "/views/repairView.fxml";
+			mainWindowController.openTab(repairId, fxmlPath , false);
+			
+		} catch (Exception e) {
+			throw new ControllerException(e.getMessage(), e);
+		}    	
     }
     
     private void deleteRepair(Reparacion reparacion) {

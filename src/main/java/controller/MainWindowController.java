@@ -79,7 +79,7 @@ public class MainWindowController {
     	menu.getItems().add(item);
     }
     
-    private void openTab(String title, String fxmlPath, boolean allowMultiple) {
+    public void openTab(String title, String fxmlPath, boolean allowMultiple) {
     	if (!allowMultiple) {
     		for (Tab tab : mainTabPane.getTabs()) {
     			if (tab.getText().equals(title)) {
@@ -99,6 +99,9 @@ public class MainWindowController {
 			Object controller = loader.getController();
 			if (controller instanceof StatusAware) {
 				((StatusAware) controller).setStatusCallback(this::setStatusMessage);
+			}
+			if (controller instanceof RepairsViewController) {
+				((RepairsViewController) controller).setMainWindowController(this);
 			}
 			
 			mainTabPane.getTabs().add(newTab);
