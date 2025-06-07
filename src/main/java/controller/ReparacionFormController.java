@@ -19,6 +19,7 @@ import service.ClienteService;
 import service.DispositivoService;
 import service.EstadoService;
 import service.ReparacionService;
+import service.ServiceException;
 
 public class ReparacionFormController {
 	@FXML
@@ -82,9 +83,9 @@ public class ReparacionFormController {
 	            clienteComboBox.setValue(null);
 	            estadoComboBox.setValue(null);
 	            detalleTextField.clear();		
-			} catch (Exception e) {
-				System.err.println("Error en ReparacionFormController al añadir reparación.");
-				e.printStackTrace();
+			} catch (ServiceException e) {
+				messageLabel.setStyle("-fx-text-fill: red;");
+				messageLabel.setText("No se ha podido guardar la reparación: los datos no han sido actualizados.");
 			}
 		}
 	}

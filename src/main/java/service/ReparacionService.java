@@ -2,19 +2,43 @@ package service;
 
 import java.util.List;
 
+import dao.ClienteDAO;
+import dao.DispositivoDAO;
+import dao.EstadoDAO;
 import dao.ReparacionDAO;
 import model.Reparacion;
 
 public class ReparacionService {
 
     private ReparacionDAO reparacionDAO;
+    private DispositivoDAO dispositivoDAO;
+    private ClienteDAO clienteDAO;
+    private EstadoDAO estadoDAO;
 
     public ReparacionService() {
         reparacionDAO = new ReparacionDAO();
+        dispositivoDAO = new DispositivoDAO();
+        clienteDAO = new ClienteDAO();
+        estadoDAO = new EstadoDAO();
     }
 
     public void save(Reparacion Reparacion) {
         try {
+        	if (Reparacion.getDispositivo() == null ||
+                    dispositivoDAO.findById(Reparacion.getDispositivo().getIdDispositivo()) == null) {
+                    throw new ServiceException("El dispositivo asociado no existe.");
+                }
+
+                if (Reparacion.getCliente() == null ||
+                    clienteDAO.findById(Reparacion.getCliente().getIdCliente()) == null) {
+                    throw new ServiceException("El cliente asociado no existe.");
+                }
+
+                if (Reparacion.getEstado() == null ||
+                    estadoDAO.findById(Reparacion.getEstado().getIdEstado()) == null) {
+                    throw new ServiceException("El estado asociado no existe.");
+                }
+        	
             reparacionDAO.save(Reparacion);
         } catch (Exception e) {
         	throw new ServiceException("Error en ReparacionService al guardar la reparación.", e);
