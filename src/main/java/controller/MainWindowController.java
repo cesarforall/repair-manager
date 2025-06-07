@@ -9,6 +9,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import model.Reparacion;
 import util.StatusAware;
 import util.StatusMessage;
 
@@ -80,6 +81,10 @@ public class MainWindowController {
     }
     
     public void openTab(String title, String fxmlPath, boolean allowMultiple) {
+        openTab(title, fxmlPath, allowMultiple, null);
+    }
+    
+    public void openTab(String title, String fxmlPath, boolean allowMultiple, Object data) {
     	if (!allowMultiple) {
     		for (Tab tab : mainTabPane.getTabs()) {
     			if (tab.getText().equals(title)) {
@@ -102,6 +107,9 @@ public class MainWindowController {
 			}
 			if (controller instanceof RepairsViewController) {
 				((RepairsViewController) controller).setMainWindowController(this);
+			}
+			if (controller instanceof RepairViewController && data instanceof Reparacion) {
+				((RepairViewController) controller).setRepair((Reparacion) data);
 			}
 			
 			mainTabPane.getTabs().add(newTab);

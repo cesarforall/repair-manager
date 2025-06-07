@@ -92,7 +92,7 @@ public class RepairsViewController {
     	String repairId = "R" + Integer.toString(reparacion.getIdReparacion());
     	try {
     		String fxmlPath = "/views/repairView.fxml";
-			mainWindowController.openTab(repairId, fxmlPath , false);
+			mainWindowController.openTab(repairId, fxmlPath , false, reparacion);
 			
 		} catch (Exception e) {
 			throw new ControllerException(e.getMessage(), e);
