@@ -47,4 +47,9 @@ public class Repuesto {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+    
+    @Override
+   	public String toString() {
+   		return idRepuesto + " " + nombre;
+   	}
 }

@@ -99,7 +99,7 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="partComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <ComboBox fx:id="partsComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                                  <children>
                                     <Button text="Refrescar" />
@@ -108,12 +108,7 @@
                               </HBox>
                            </children>
                         </GridPane>
-                        <TableView prefHeight="200.0" prefWidth="200.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
-                        </TableView>
+                        <TableView fx:id="partsTable" />
                         <Label text="Análisis financiero:">
                            <font>
                               <Font name="System Bold" size="14.0" />

@@ -2,14 +2,24 @@ package controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import model.Estado;
 import model.Reparacion;
+import model.Repuesto;
+import service.RepuestoService;
+import service.ServiceException;
+import util.LoggerUtil;
+import util.TableColumnBuilder;
 
 public class RepairViewController {
 	@FXML
@@ -26,12 +36,19 @@ public class RepairViewController {
 	Label outDateLabel;
 	@FXML
 	TextArea commentsTextArea;
+	@FXML
+	ComboBox<Repuesto> partsComboBox;
+	
+	Label placeholderLabel;
 	
 	private Reparacion repair;
+	
+	RepuestoService repuestoService = new RepuestoService();
 	
 	@FXML
 	public void initialize() {
 		Platform.runLater(this::loadRepair);
+		Platform.runLater(this::loadParts);
 	}
 	
 	public void setRepair(Reparacion repair) {
@@ -51,6 +68,27 @@ public class RepairViewController {
 			}
 		});
 	}
+	
+    private void loadParts() {
+    	new Thread(() -> {
+    		try {
+                List<Repuesto> parts = repuestoService.findAll();
+                ObservableList<Repuesto> observableParts = FXCollections.observableArrayList(parts);
+                
+                Platform.runLater(() -> {
+                    partsComboBox.setItems(observableParts);
+                    if (!observableParts.isEmpty()) {
+                        partsComboBox.getSelectionModel().selectFirst();
+                    }
+                });
+            } catch (ServiceException e) {
+                Platform.runLater(() -> {
+                    partsComboBox.setPromptText("Error al cargar");
+                });
+                LoggerUtil.logError(e.getMessage(), e);
+            }
+    	}).start();    	
+    }
 	
 	public String formatEntryDate(String date) {
 	    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
