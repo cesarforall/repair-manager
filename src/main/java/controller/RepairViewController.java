@@ -13,9 +13,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import model.Estado;
 import model.Reparacion;
 import model.Repuesto;
+import model.RepuestoReparacion;
+import service.RepuestoReparacionService;
 import service.RepuestoService;
 import service.ServiceException;
 import util.LoggerUtil;
@@ -38,22 +41,81 @@ public class RepairViewController {
 	TextArea commentsTextArea;
 	@FXML
 	ComboBox<Repuesto> partsComboBox;
+	@FXML
+	TextField quantityTextField;
+	@FXML
+	TableView<RepuestoReparacion> partsTable;
+	@FXML
+	Label partsMessageLabel;
 	
 	Label placeholderLabel;
 	
 	private Reparacion repair;
 	
 	RepuestoService repuestoService = new RepuestoService();
+	RepuestoReparacionService repuestoReparacionService = new RepuestoReparacionService();
 	
 	@FXML
 	public void initialize() {
+		TableColumnBuilder.addColumn(partsTable, "Id", 80, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getRepuesto().getIdRepuesto()));
+		
+		TableColumnBuilder.addColumn(partsTable, "Nombre", 200, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getRepuesto().getNombre()));
+		
+		TableColumnBuilder.addColumn(partsTable, "Precio", 100, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getRepuesto().getPrecio()));
+		
+		TableColumnBuilder.addColumn(partsTable, "Cantidad", 100, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getCantidad()));
+		    	
+    	placeholderLabel = new Label("Cargando Repuestos...");
+    	partsTable.setPlaceholder(placeholderLabel);
+		
 		Platform.runLater(this::loadRepair);
 		Platform.runLater(this::loadParts);
+		Platform.runLater(this::loadPartsRepair);
 	}
 	
 	public void setRepair(Reparacion repair) {
 		this.repair = repair;
 	}
+	
+	public void addPart() {
+	    Repuesto selectedPart = partsComboBox.getValue();
+	    String quantityText = quantityTextField.getText();
+
+	    if (selectedPart == null) {
+	        partsMessageLabel.setStyle("-fx-text-fill: red;");
+	        partsMessageLabel.setText("No se encontraron componentes para añadir.");
+	    } else if(quantityText.isBlank()){
+	    	partsMessageLabel.setStyle("-fx-text-fill: red;");
+	        partsMessageLabel.setText("El campo \"Cantidad\" es obligatorio.");
+	    }else if(Integer.parseInt(quantityText) <= 0){
+	    	partsMessageLabel.setStyle("-fx-text-fill: red;");
+	        partsMessageLabel.setText("La cantidad no puede ser inferior a 1.");
+	    }else {
+	        try {
+	            int quantity = Integer.parseInt(quantityText);
+
+	            RepuestoReparacion partRepair = new RepuestoReparacion(repair, selectedPart, quantity);
+	            RepuestoReparacionService service = new RepuestoReparacionService();
+	            service.save(partRepair);
+
+	            refreshPartsTable();
+	            
+	            partsMessageLabel.setStyle("-fx-text-fill: green;");
+	            partsMessageLabel.setText("Componente añadido correctamente.");
+	            quantityTextField.clear();
+
+	        } catch (ServiceException e) {
+	            partsMessageLabel.setStyle("-fx-text-fill: red;");
+	            partsMessageLabel.setText("Se ha producido un error al añadir el componente.");
+	            LoggerUtil.logError(e.getMessage(), e);
+	        }
+	    }
+	}
+
 	
 	private void loadRepair() {
 		Platform.runLater(() -> {
@@ -69,6 +131,7 @@ public class RepairViewController {
 		});
 	}
 	
+	@FXML
     private void loadParts() {
     	new Thread(() -> {
     		try {
@@ -88,6 +151,40 @@ public class RepairViewController {
                 LoggerUtil.logError(e.getMessage(), e);
             }
     	}).start();    	
+    }
+    
+    private void loadPartsRepair() {
+    	new Thread(() -> {
+    		try {
+    			List<RepuestoReparacion> repuestos = repuestoReparacionService.findAll();
+            	ObservableList<RepuestoReparacion> observableRepuestos = FXCollections.observableArrayList(repuestos);
+            	        	
+            	Platform.runLater(() -> {
+            		if (repuestos == null || repuestos.isEmpty()) {
+    					partsTable.setPlaceholder(new Label("No se encontraron componentes en la reparación."));
+    					partsTable.getItems().clear();
+    				} else {
+    					partsTable.setItems(observableRepuestos);
+    				}        		
+            	});
+			} catch (ServiceException e) {
+				Platform.runLater(() -> {
+					placeholderLabel = new Label("Error al cargar los componentes");
+		        	partsTable.setPlaceholder(placeholderLabel);
+				});
+				LoggerUtil.logError(e.getMessage(), e);
+			}
+    	}).start();    	
+    }
+    
+    @FXML
+    private void refreshPartsTable() {
+    	List<RepuestoReparacion> repuestos = repuestoReparacionService.findAll();
+    	partsTable.setItems(FXCollections.observableArrayList(repuestos));
+    	
+    	if (repuestos == null || repuestos.isEmpty()) {
+            partsTable.setPlaceholder(new Label("No se encontraron componentes en la repación"));
+        }
     }
 	
 	public String formatEntryDate(String date) {
