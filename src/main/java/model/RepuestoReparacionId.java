@@ -10,12 +10,12 @@ public class RepuestoReparacionId implements Serializable {
 	 * Combina los IDs de reparación y repuesto.
 	 */
 	private static final long serialVersionUID = 1L;
-	private Long reparacion;
-    private Long repuesto;
+	private int reparacion;
+    private int repuesto;
 
     public RepuestoReparacionId() {}
 
-    public RepuestoReparacionId(Long reparacion, Long repuesto) {
+    public RepuestoReparacionId(int reparacion, int repuesto) {
         this.reparacion = reparacion;
         this.repuesto = repuesto;
     }
@@ -35,19 +35,19 @@ public class RepuestoReparacionId implements Serializable {
     }
 
     // Getters y setters
-    public Long getReparacion() {
+    public int getReparacion() {
         return reparacion;
     }
 
-    public void setReparacion(Long reparacion) {
+    public void setReparacion(int reparacion) {
         this.reparacion = reparacion;
     }
 
-    public Long getRepuesto() {
+    public int getRepuesto() {
         return repuesto;
     }
 
-    public void setRepuesto(Long repuesto) {
+    public void setRepuesto(int repuesto) {
         this.repuesto = repuesto;
     }
 }
