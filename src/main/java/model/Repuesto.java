@@ -50,6 +50,6 @@ public class Repuesto {
     
     @Override
    	public String toString() {
-   		return idRepuesto + " " + nombre;
+   		return "C" + idRepuesto + " " + nombre;
    	}
 }
