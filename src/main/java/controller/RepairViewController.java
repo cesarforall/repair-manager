@@ -2,6 +2,7 @@ package controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -11,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -22,6 +24,7 @@ import service.ReparacionService;
 import service.RepuestoReparacionService;
 import service.RepuestoService;
 import service.ServiceException;
+import util.GenericContextMenuBuilder;
 import util.LoggerUtil;
 import util.TableColumnBuilder;
 
@@ -80,6 +83,7 @@ public class RepairViewController {
 		Platform.runLater(this::loadRepair);
 		Platform.runLater(this::loadParts);
 		Platform.runLater(this::loadPartsRepair);
+		Platform.runLater(this::addContextMenu);
 	}
 	
 	public void setRepair(Reparacion repair) {
@@ -121,6 +125,19 @@ public class RepairViewController {
 	    }
 	}
 
+	private void removePart(RepuestoReparacion part) {
+	    try {
+	        RepuestoReparacionService service = new RepuestoReparacionService();
+	        service.delete(part);
+	        refreshPartsTable();
+	        partsMessageLabel.setStyle("-fx-text-fill: green;");
+	        partsMessageLabel.setText("Componente eliminado correctamente.");
+	    } catch (ServiceException e) {
+	        partsMessageLabel.setStyle("-fx-text-fill: red;");
+	        partsMessageLabel.setText("Error al eliminar el componente.");
+	        LoggerUtil.logError(e.getMessage(), e);
+	    }
+	}
 	
 	private void loadRepair() {
 		Platform.runLater(() -> {
@@ -207,6 +224,14 @@ public class RepairViewController {
     		messageLabel.setStyle("-fx-text-fill: red;");
             messageLabel.setText("Ha ocurrido un error al guardar los comentarios.");
     	}
+    }
+    
+    private void addContextMenu() {
+        GenericContextMenuBuilder.attach(partsTable, part -> {
+            MenuItem delete = new MenuItem("Eliminar");
+            delete.setOnAction(e -> removePart(part));
+            return Arrays.asList(delete);
+        });
     }
 	
 	public String formatEntryDate(String date) {
