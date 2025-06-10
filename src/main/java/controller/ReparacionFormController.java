@@ -72,7 +72,7 @@ public class ReparacionFormController {
 			try {
 				reparacionService = new ReparacionService();
 				
-				Reparacion reparacion = new Reparacion(dispositivo, cliente, estado, detalle, fechaEntrada.toString(), null, null, 0.0);
+				Reparacion reparacion = new Reparacion(dispositivo, cliente, estado, detalle, fechaEntrada.toString(), null, null, 0.0, 0.0);
 				
 				reparacionService.save(reparacion);
 				messageLabel.setStyle("-fx-text-fill: green;");

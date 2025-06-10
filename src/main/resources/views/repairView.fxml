@@ -89,17 +89,17 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
-                           <children>
-                              <Label text="Total ingresos:" />
-                              <TextField GridPane.columnIndex="1" />
-                              <Button text="Añadir" GridPane.columnIndex="2" />
-                              <Label text="Gastos:" GridPane.rowIndex="1" />
-                              <Label text="0 €" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Total:" GridPane.rowIndex="2" />
-                              <Label text="0 €" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label text="Beneficio:" GridPane.rowIndex="3" />
-                              <Label text="0 %" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                           </children>
+						<children>
+						    <Label text="Total ingresos:" />
+						    <TextField fx:id="incomeTextField" GridPane.columnIndex="1" />
+						    <Button onAction="#addIncomeAndUpdate" text="Añadir" fx:id="addIncomeButton" GridPane.columnIndex="2" />
+						    <Label text="Gastos:" GridPane.rowIndex="1" />
+						    <Label fx:id="expensesLabel" text="0 €" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						    <Label text="Total:" GridPane.rowIndex="2" />
+						    <Label fx:id="totalLabel" text="0 €" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+						    <Label text="Beneficio:" GridPane.rowIndex="3" />
+						    <Label fx:id="profitLabel" text="0 %" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+						</children>
                         </GridPane>
                      </children>
                      <padding>

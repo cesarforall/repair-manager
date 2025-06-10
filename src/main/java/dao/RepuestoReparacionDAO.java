@@ -90,4 +90,15 @@ public class RepuestoReparacionDAO implements GenericDAO<RepuestoReparacion> {
 	                     .uniqueResult();
 	    }
 	}
+	
+	public List<RepuestoReparacion> findByReparacion(int idReparacion) {
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+	        String hql = "FROM RepuestoReparacion WHERE reparacion.idReparacion = :idReparacion";
+	        return session.createQuery(hql, RepuestoReparacion.class)
+	            .setParameter("idReparacion", idReparacion)
+	            .list();
+	    } catch (Exception e) {
+	        throw new DAOException("Error al obtener repuestos por reparación.", e);
+	    }
+	}
 }

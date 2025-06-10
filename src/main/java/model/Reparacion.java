@@ -35,12 +35,15 @@ public class Reparacion {
     @Column(name = "enlace_doc")
     private String enlaceDocumento;
 
-    @Column(name = "precio", nullable = false)
-    private double precio;
+    @Column(name = "ingresos", nullable = false)
+    private double ingresos;
+
+    @Column(name = "gastos", nullable = false)
+    private double gastos;
 
     public Reparacion() {}
 
-    public Reparacion(Dispositivo dispositivo, Cliente cliente, Estado estado, String detalle, String fechaEntrada, String fechaSalida, String enlaceDocumento, double precio) {
+    public Reparacion(Dispositivo dispositivo, Cliente cliente, Estado estado, String detalle, String fechaEntrada, String fechaSalida, String enlaceDocumento, double ingresos, double gastos) {
         this.dispositivo = dispositivo;
         this.cliente = cliente;
         this.estado = estado;
@@ -48,19 +51,21 @@ public class Reparacion {
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.enlaceDocumento = enlaceDocumento;
-        this.precio = precio;
+        this.ingresos = ingresos;
+        this.gastos = gastos;
     }
-    
+
     public Reparacion(Reparacion otra) {
-    	this.idReparacion = otra.idReparacion;
-    	this.dispositivo = otra.dispositivo;
-    	this.cliente = otra.cliente;
-    	this.estado = otra.estado;
-    	this.detalle = otra.detalle;
-    	this.fechaEntrada = otra.fechaEntrada;
-    	this.fechaSalida = otra.fechaSalida;
-    	this.enlaceDocumento = otra.enlaceDocumento;
-    	this.precio = otra.precio;
+        this.idReparacion = otra.idReparacion;
+        this.dispositivo = otra.dispositivo;
+        this.cliente = otra.cliente;
+        this.estado = otra.estado;
+        this.detalle = otra.detalle;
+        this.fechaEntrada = otra.fechaEntrada;
+        this.fechaSalida = otra.fechaSalida;
+        this.enlaceDocumento = otra.enlaceDocumento;
+        this.ingresos = otra.ingresos;
+        this.gastos = otra.gastos;
     }
 
     public int getIdReparacion() {
@@ -127,11 +132,19 @@ public class Reparacion {
         this.enlaceDocumento = enlaceDocumento;
     }
 
-    public double getPrecio() {
-        return precio;
+    public double getIngresos() {
+        return ingresos;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setIngresos(double ingresos) {
+        this.ingresos = ingresos;
+    }
+
+    public double getGastos() {
+        return gastos;
+    }
+
+    public void setGastos(double gastos) {
+        this.gastos = gastos;
     }
 }

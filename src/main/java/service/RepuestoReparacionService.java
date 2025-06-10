@@ -72,4 +72,17 @@ public class RepuestoReparacionService implements IGenericService<RepuestoRepara
             throw new ServiceException("Error al obtener todos los RepuestoReparacion.", e);
         }
     }
+    
+    public double calculateTotalByRepair(int idReparacion) {
+        try {
+            List<RepuestoReparacion> parts = dao.findByReparacion(idReparacion);
+            double total = 0;
+            for (RepuestoReparacion part : parts) {
+                total += part.getCantidad() * part.getRepuesto().getPrecio();
+            }
+            return total;
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular el total de componentes.", e);
+        }
+    }
 }

@@ -60,9 +60,13 @@ public class RepairsViewController {
     	TableColumnBuilder.addColumn(repairsTable, "Enlace de documentos", 150, cellData ->
 			new SimpleObjectProperty<>(cellData.getValue().getEnlaceDocumento())
     	);
-    	TableColumnBuilder.addColumn(repairsTable, "Precio", 100, cellData ->
-			new SimpleObjectProperty<>(cellData.getValue().getPrecio())
-    	);
+    	TableColumnBuilder.addColumn(repairsTable, "Total", 100, cellData -> {
+    	    double ingresos = cellData.getValue().getIngresos();
+    	    double gastos = cellData.getValue().getGastos();
+    	    double total = ingresos - gastos;
+    	    return new SimpleObjectProperty<>(total);
+    	});
+
     	
     	placeholderLabel = new Label("Cargando Reparaciones...");
     	repairsTable.setPlaceholder(placeholderLabel);

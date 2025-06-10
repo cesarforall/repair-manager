@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -55,6 +56,17 @@ public class RepairViewController {
 	Label partsMessageLabel;
 	@FXML
 	Label messageLabel;
+	@FXML
+	private TextField incomeTextField;
+	@FXML
+	private Button addIncomeButton;
+	@FXML
+	private Label expensesLabel;
+	@FXML
+	private Label totalLabel;
+	@FXML
+	private Label profitLabel;
+
 	
 	Label placeholderLabel;
 	
@@ -149,6 +161,16 @@ public class RepairViewController {
 				inDateLabel.setText(formatEntryDate(repair.getFechaEntrada()));
 				outDateLabel.setText(repair.getFechaSalida() != null ? repair.getFechaEntrada() : "");
 				commentsTextArea.setText(repair.getDetalle());
+				incomeTextField.setText(String.valueOf(repair.getIngresos()));
+
+				double expenses = new RepuestoReparacionService().calculateTotalByRepair(repair.getIdReparacion());
+				double income = repair.getIngresos();
+				double total = income - expenses;
+				double profit = (income == 0) ? 0 : (total / income) * 100;
+
+				expensesLabel.setText(expenses + " €");
+				totalLabel.setText(total + " €");
+				profitLabel.setText(String.format("%.2f", profit) + " %");
 			}
 		});
 	}
@@ -207,6 +229,8 @@ public class RepairViewController {
     	if (repuestos == null || repuestos.isEmpty()) {
             partsTable.setPlaceholder(new Label("No se encontraron componentes en la repación"));
         }
+    	
+    	addIncomeAndUpdate();
     }
     
     @FXML
@@ -226,6 +250,33 @@ public class RepairViewController {
     	}
     }
     
+    @FXML
+    private void addIncomeAndUpdate() {
+        try {
+            double income = incomeTextField.getText().isBlank() ? 0 : Double.parseDouble(incomeTextField.getText());
+            RepuestoReparacionService service = new RepuestoReparacionService();
+            double expenses = service.calculateTotalByRepair(repair.getIdReparacion());
+            double total = income - expenses;
+            double profit = (income == 0) ? 0 : (total / income) * 100;
+
+            expensesLabel.setText(expenses + " €");
+            totalLabel.setText(total + " €");
+            profitLabel.setText(String.format("%.2f", profit) + " %");
+
+            repair.setIngresos(income);
+            repair.setGastos(expenses);
+
+            ReparacionService reparacionService = new ReparacionService();
+            reparacionService.update(repair);
+
+        } catch (ServiceException e) {
+            LoggerUtil.logError(e.getMessage(), e);
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Ha ocurrido un error al calcular los datos.");
+        }
+    }
+
+ 
     private void addContextMenu() {
         GenericContextMenuBuilder.attach(partsTable, part -> {
             MenuItem delete = new MenuItem("Eliminar");
