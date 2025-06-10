@@ -50,6 +50,18 @@ public class Reparacion {
         this.enlaceDocumento = enlaceDocumento;
         this.precio = precio;
     }
+    
+    public Reparacion(Reparacion otra) {
+    	this.idReparacion = otra.idReparacion;
+    	this.dispositivo = otra.dispositivo;
+    	this.cliente = otra.cliente;
+    	this.estado = otra.estado;
+    	this.detalle = otra.detalle;
+    	this.fechaEntrada = otra.fechaEntrada;
+    	this.fechaSalida = otra.fechaSalida;
+    	this.enlaceDocumento = otra.enlaceDocumento;
+    	this.precio = otra.precio;
+    }
 
     public int getIdReparacion() {
         return idReparacion;

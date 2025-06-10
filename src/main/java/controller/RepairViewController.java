@@ -18,6 +18,7 @@ import model.Estado;
 import model.Reparacion;
 import model.Repuesto;
 import model.RepuestoReparacion;
+import service.ReparacionService;
 import service.RepuestoReparacionService;
 import service.RepuestoService;
 import service.ServiceException;
@@ -29,6 +30,8 @@ public class RepairViewController {
 	Label repairIdLabel;
 	@FXML
 	ComboBox<Estado> stateComboBox;
+	@FXML
+	Label stateLabel;
 	@FXML
 	Label deviceLabel;
 	@FXML
@@ -47,6 +50,8 @@ public class RepairViewController {
 	TableView<RepuestoReparacion> partsTable;
 	@FXML
 	Label partsMessageLabel;
+	@FXML
+	Label messageLabel;
 	
 	Label placeholderLabel;
 	
@@ -121,7 +126,7 @@ public class RepairViewController {
 		Platform.runLater(() -> {
 			if (repair != null) {
 				repairIdLabel.setText("Reparación: " + repair.getIdReparacion());
-				stateComboBox.getSelectionModel().select(repair.getEstado());
+				stateLabel.setText(repair.getEstado().getNombre());
 				deviceLabel.setText(repair.getDispositivo().getNombre());
 				clientLabel.setText(repair.getCliente().getNombre());
 				inDateLabel.setText(formatEntryDate(repair.getFechaEntrada()));
@@ -185,6 +190,23 @@ public class RepairViewController {
     	if (repuestos == null || repuestos.isEmpty()) {
             partsTable.setPlaceholder(new Label("No se encontraron componentes en la repación"));
         }
+    }
+    
+    @FXML
+    private void updateComment() {
+    	try {
+    		Reparacion newRepair = new Reparacion(repair);
+    		newRepair.setDetalle(commentsTextArea.getText());
+    		ReparacionService repairService = new ReparacionService();
+    		repairService.update(newRepair);
+    		messageLabel.setStyle("-fx-text-fill: green;");
+            messageLabel.setText("Comentarios guardados correctamente.");
+    		
+    	} catch (Exception e) {
+    		LoggerUtil.logError(e.getMessage(), e);
+    		messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Ha ocurrido un error al guardar los comentarios.");
+    	}
     }
 	
 	public String formatEntryDate(String date) {
