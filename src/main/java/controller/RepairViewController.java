@@ -26,6 +26,7 @@ import model.Estado;
 import model.Reparacion;
 import model.Repuesto;
 import model.RepuestoReparacion;
+import service.EstadoService;
 import service.ReparacionService;
 import service.RepuestoReparacionService;
 import service.RepuestoService;
@@ -121,6 +122,7 @@ public class RepairViewController implements StatusAware{
 	}
 	
 	public void setRepair(Reparacion repair) {
+		clearRepairData();
 		this.repair = repair;
 	}
 	
@@ -133,6 +135,8 @@ public class RepairViewController implements StatusAware{
 	}
 	
 	public void addPart() {
+		if (addPartButton.isDisabled()) return;
+		
 	    Repuesto selectedPart = partsComboBox.getValue();
 	    String quantityText = quantityTextField.getText();
 
@@ -181,29 +185,51 @@ public class RepairViewController implements StatusAware{
 	    }
 	}
 	
-	private void loadRepair() {
-		Platform.runLater(() -> {
-			if (repair != null) {
-				repairIdLabel.setText("Reparación: " + repair.getIdReparacion());
-				stateLabel.setText(repair.getEstado().getNombre());
-				deviceLabel.setText(repair.getDispositivo().getNombre());
-				clientLabel.setText(repair.getCliente().getNombre());
-				inDateLabel.setText(formatEntryDate(repair.getFechaEntrada()));
-				outDateLabel.setText(repair.getFechaSalida() != null ? repair.getFechaEntrada() : "");
-				commentsTextArea.setText(repair.getDetalle());
-				incomeTextField.setText(String.valueOf(repair.getIngresos()));
-
-				double expenses = new RepuestoReparacionService().calculateTotalByRepair(repair.getIdReparacion());
-				double income = repair.getIngresos();
-				double total = income - expenses;
-				double profit = (income == 0) ? 0 : (total / income) * 100;
-
-				expensesLabel.setText(expenses + " €");
-				totalLabel.setText(total + " €");
-				profitLabel.setText(String.format("%.2f", profit) + " %");
-			}
-		});
+	private void clearRepairData() {
+	    repairIdLabel.setText("");
+	    stateLabel.setText("");
+	    deviceLabel.setText("");
+	    clientLabel.setText("");
+	    inDateLabel.setText("");
+	    outDateLabel.setText("");
+	    commentsTextArea.clear();
+	    incomeTextField.clear();
+	    expensesLabel.setText("");
+	    totalLabel.setText("");
+	    profitLabel.setText("");
+	    partsTable.getItems().clear();
+	    partsMessageLabel.setText("");
+	    messageLabel.setText("");
 	}
+	
+	private void loadRepair() {
+	    Platform.runLater(() -> {
+	        if (repair != null) {
+	            repairIdLabel.setText("Reparación: " + repair.getIdReparacion());
+	            stateLabel.setText(repair.getEstado().getNombre());
+	            deviceLabel.setText(repair.getDispositivo().getNombre());
+	            clientLabel.setText(repair.getCliente().getNombre());
+	            inDateLabel.setText(formatEntryDate(repair.getFechaEntrada()));
+	            outDateLabel.setText(formatEntryDate(repair.getFechaSalida()) != null ? formatEntryDate(repair.getFechaSalida()) : "");
+	            commentsTextArea.setText(repair.getDetalle());
+	            incomeTextField.setText(String.valueOf(repair.getIngresos()));
+	
+	            double expenses = new RepuestoReparacionService().calculateTotalByRepair(repair.getIdReparacion());
+	            double income = repair.getIngresos();
+	            double total = income - expenses;
+	            double profit = (income == 0) ? 0 : (total / income) * 100;
+	
+	            expensesLabel.setText(expenses + " €");
+	            totalLabel.setText(total + " €");
+	            profitLabel.setText(String.format("%.2f", profit) + " %");
+	
+	            if (repair.getEstado().getNombre().equalsIgnoreCase("Cerrada")) {
+	                disableInputs();
+	            }
+	        }
+	    });
+	}
+
 	
 	@FXML
     private void loadParts() {
@@ -227,44 +253,48 @@ public class RepairViewController implements StatusAware{
     	}).start();    	
     }
     
-    private void loadPartsRepair() {
-    	new Thread(() -> {
-    		try {
-    			List<RepuestoReparacion> repuestos = repuestoReparacionService.findAll();
-            	ObservableList<RepuestoReparacion> observableRepuestos = FXCollections.observableArrayList(repuestos);
-            	        	
-            	Platform.runLater(() -> {
-            		if (repuestos == null || repuestos.isEmpty()) {
-    					partsTable.setPlaceholder(new Label("No se encontraron componentes en la reparación."));
-    					partsTable.getItems().clear();
-    				} else {
-    					partsTable.setItems(observableRepuestos);
-    				}        		
-            	});
-			} catch (ServiceException e) {
-				Platform.runLater(() -> {
-					placeholderLabel = new Label("Error al cargar los componentes");
-		        	partsTable.setPlaceholder(placeholderLabel);
-				});
-				LoggerUtil.logError(e.getMessage(), e);
-			}
-    	}).start();    	
-    }
+	private void loadPartsRepair() {
+	    new Thread(() -> {
+	        try {
+	            List<RepuestoReparacion> repuestos = repuestoReparacionService.findByRepairId(repair.getIdReparacion());
+	            ObservableList<RepuestoReparacion> observableRepuestos = FXCollections.observableArrayList(repuestos);
+	
+	            Platform.runLater(() -> {
+	                if (repuestos == null || repuestos.isEmpty()) {
+	                    partsTable.setPlaceholder(new Label("No se encontraron componentes en la reparación."));
+	                    partsTable.getItems().clear();
+	                } else {
+	                    partsTable.setItems(observableRepuestos);
+	                }
+	            });
+	        } catch (ServiceException e) {
+	            Platform.runLater(() -> {
+	                placeholderLabel = new Label("Error al cargar los componentes");
+	                partsTable.setPlaceholder(placeholderLabel);
+	            });
+	            LoggerUtil.logError(e.getMessage(), e);
+	        }
+	    }).start();
+	}
     
     @FXML
     private void refreshPartsTable() {
-    	List<RepuestoReparacion> repuestos = repuestoReparacionService.findAll();
-    	partsTable.setItems(FXCollections.observableArrayList(repuestos));
-    	
-    	if (repuestos == null || repuestos.isEmpty()) {
-            partsTable.setPlaceholder(new Label("No se encontraron componentes en la repación"));
+    	if (refreshPartsButton.isDisabled()) return;
+
+        List<RepuestoReparacion> repuestos = repuestoReparacionService.findByRepairId(repair.getIdReparacion());
+        partsTable.setItems(FXCollections.observableArrayList(repuestos));
+
+        if (repuestos == null || repuestos.isEmpty()) {
+            partsTable.setPlaceholder(new Label("No se encontraron componentes en la reparación"));
         }
-    	
-    	addIncomeAndUpdate();
+
+        addIncomeAndUpdate();
     }
     
     @FXML
     private void updateComment() {
+    	if (saveButton.isDisabled()) return;
+    	
     	try {
     		Reparacion newRepair = new Reparacion(repair);
     		newRepair.setDetalle(commentsTextArea.getText());
@@ -282,6 +312,8 @@ public class RepairViewController implements StatusAware{
     
     @FXML
     private void addIncomeAndUpdate() {
+    	if (addIncomeButton.isDisabled()) return;
+    	
         try {
             double income = incomeTextField.getText().isBlank() ? 0 : Double.parseDouble(incomeTextField.getText());
             RepuestoReparacionService service = new RepuestoReparacionService();
@@ -308,6 +340,8 @@ public class RepairViewController implements StatusAware{
 
     @FXML
     private void deleteRepair() {
+    	if (deleteButton.isDisabled()) return;
+    	
     	if (repair != null) {
     		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     		alert.setTitle("Confirmación de eliminación");
@@ -329,6 +363,47 @@ public class RepairViewController implements StatusAware{
 				}    			
     		}
     		mainWindowController.closeTab(repairTab);    		
+    	}
+    }
+    
+    @FXML
+    private void finishRepair() {
+    	if (finishButton.isDisabled()) return;
+
+    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    	alert.setTitle("Confirmación de finalización");
+    	alert.setHeaderText("¿Seguro que deseas finalizar esta reparación?");
+    	alert.setContentText("No se podrán modificar los datos.");
+
+    	Optional<ButtonType> result = alert.showAndWait();
+    	if (result.isPresent() && result.get() == ButtonType.OK) {
+    		try {
+    			ReparacionService repairService = new ReparacionService();
+    			EstadoService stateService = new EstadoService();
+    			Estado stateFinish = new Estado("Cerrada", "Reparaciones terminadas");
+    			Reparacion finishedRepair = new Reparacion(repair);
+
+    			Estado existingState = stateService.findByName(stateFinish);
+    			if (existingState == null) {
+    				stateService.save(stateFinish);
+    				existingState = stateFinish;
+    			}
+
+    			finishedRepair.setEstado(existingState);
+    			finishedRepair.setFechaSalida(LocalDate.now().toString());
+
+    			repairService.update(finishedRepair);
+
+    			repair.setFechaSalida(finishedRepair.getFechaSalida());
+    			outDateLabel.setText(formatEntryDate(finishedRepair.getFechaSalida()));
+
+    			disableInputs();
+    		} catch (Exception e) {
+    			Platform.runLater(() -> {
+    				updateStatusMessage(new StatusMessage(Type.ERROR, "Se ha producido un error al terminar la reparación"));
+    			});
+    			LoggerUtil.logError(e.getMessage(), e);
+    		}
     	}
     }
     
@@ -387,12 +462,14 @@ public class RepairViewController implements StatusAware{
         });
     }
 	
-	public String formatEntryDate(String date) {
-	    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	    LocalDate localDate = LocalDate.parse(date, inputFormatter);
-	    return localDate.format(outputFormatter);
-	}
+    public String formatEntryDate(String date) {
+        if (date == null) return "";
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(date, inputFormatter);
+        return localDate.format(outputFormatter);
+    }
+
 
 	@Override
 	public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
