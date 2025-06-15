@@ -58,6 +58,19 @@ public class RepuestoReparacionDAO implements GenericDAO<RepuestoReparacion> {
 			throw new DAOException("Error al eliminar RepuestoReparacion.", e);
 		}
 	}
+	
+	public void deleteByReparacion(int idReparacion) {
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+	        session.beginTransaction();
+	        String hql = "DELETE FROM RepuestoReparacion WHERE reparacion.id = :idReparacion";
+	        session.createMutationQuery(hql)
+	               .setParameter("idReparacion", idReparacion)
+	               .executeUpdate();
+	        session.getTransaction().commit();
+	    } catch (Exception e) {
+	        throw new DAOException("Error al eliminar repuestos de la reparación.", e);
+	    }
+	}
 
 	@Override
 	public RepuestoReparacion findById(int id) {
