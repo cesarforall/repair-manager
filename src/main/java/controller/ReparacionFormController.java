@@ -140,7 +140,10 @@ public class ReparacionFormController {
 	private void updateEstadoComboBox() {
 		new Thread(() -> {
 			estadoService = new EstadoService();
-			List<Estado> estados = estadoService.findAll();
+			List<Estado> estados = estadoService.findAll()
+					.stream()
+					.filter(e -> !e.getNombre().equalsIgnoreCase("Cerrada"))
+					.toList();
 
 			Platform.runLater(() -> {
 				estadoComboBox.setItems(FXCollections.observableArrayList(estados));
