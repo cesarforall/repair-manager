@@ -52,4 +52,13 @@ public class EstadoService {
             throw new ServiceException("Error en EstadoService al obtener todos los estados.", e);
         }
     }
+    
+    public Estado findByName(Estado state) {
+    	String name = state.getNombre();
+        try {
+            return EstadoDAO.findByName(name);
+        } catch (Exception e) {
+            throw new ServiceException("Error en EstadoService al obtener el estado por nombre.", e);
+        }
+    }
 }

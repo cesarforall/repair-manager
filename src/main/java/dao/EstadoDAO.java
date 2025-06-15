@@ -69,4 +69,14 @@ public class EstadoDAO implements GenericDAO<Estado>{
             throw new DAOException("Error al obtener todos los estados.", e);
 		}		
 	}
+	
+	public Estado findByName(String name) {
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+	        return session.createQuery("FROM Estado WHERE nombre = :name", Estado.class)
+	                      .setParameter("name", name)
+	                      .uniqueResult();
+	    } catch (Exception e) {
+	        throw new DAOException("Error al obtener el estado.", e);
+	    }
+	}
 }
