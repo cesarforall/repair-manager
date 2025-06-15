@@ -6,6 +6,7 @@ import dao.ClienteDAO;
 import dao.DispositivoDAO;
 import dao.EstadoDAO;
 import dao.ReparacionDAO;
+import dao.RepuestoReparacionDAO;
 import model.Reparacion;
 
 public class ReparacionService {
@@ -14,12 +15,14 @@ public class ReparacionService {
     private DispositivoDAO dispositivoDAO;
     private ClienteDAO clienteDAO;
     private EstadoDAO estadoDAO;
+    private RepuestoReparacionDAO repuestoReparacionDAO;
 
     public ReparacionService() {
         reparacionDAO = new ReparacionDAO();
         dispositivoDAO = new DispositivoDAO();
         clienteDAO = new ClienteDAO();
         estadoDAO = new EstadoDAO();
+        repuestoReparacionDAO = new RepuestoReparacionDAO();
     }
 
     public void save(Reparacion Reparacion) {
@@ -53,11 +56,13 @@ public class ReparacionService {
         }
     }
 
-    public void delete(Reparacion Reparacion) {
+    public void delete(Reparacion reparacion) {
         try {
-            reparacionDAO.delete(Reparacion);
+            repuestoReparacionDAO.deleteByReparacion(reparacion.getIdReparacion());
+
+            reparacionDAO.delete(reparacion);
         } catch (Exception e) {
-        	throw new ServiceException("Error en ReparacionService al eliminar la reparación.", e);
+            throw new ServiceException("Error en ReparacionService al eliminar la reparación.", e);
         }
     }
     
