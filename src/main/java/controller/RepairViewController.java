@@ -332,6 +332,45 @@ public class RepairViewController implements StatusAware{
     	}
     }
     
+    private void disableInputs() {
+        if (stateComboBox != null) {
+            stateComboBox.setDisable(true);
+        }
+        if (commentsTextArea != null) {
+            commentsTextArea.setDisable(true);
+        }
+        if (incomeTextField != null) {
+            incomeTextField.setDisable(true);
+        }
+        if (addIncomeButton != null) {
+            addIncomeButton.setDisable(true);
+        }
+        if (quantityTextField != null) {
+            quantityTextField.setDisable(true);
+        }
+        if (partsComboBox != null) {
+            partsComboBox.setDisable(true);
+        }
+        if (partsTable != null) {
+            partsTable.setDisable(true);
+        }
+        if (saveButton != null) {
+            saveButton.setDisable(true);
+        }
+        if (refreshPartsButton != null) {
+            refreshPartsButton.setDisable(true);
+        }
+        if (addPartButton != null) {
+            addPartButton.setDisable(true);
+        }
+        if (finishButton != null) {
+            finishButton.setDisable(true);
+        }
+        if (deleteButton != null) {
+            deleteButton.setDisable(true);
+        }
+    }
+    
     private void updateStatusMessage(StatusMessage statusMessage) {
     	if (statusMessageCallback != null) {
     		Platform.runLater(() -> {
