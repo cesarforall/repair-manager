@@ -111,6 +111,10 @@ public class MainWindowController {
 			if (controller instanceof RepairViewController && data instanceof Reparacion) {
 				((RepairViewController) controller).setRepair((Reparacion) data);
 			}
+			if (controller instanceof RepairViewController) {
+			    ((RepairViewController) controller).setMainWindowController(this);
+			    ((RepairViewController) controller).setCurrentTab(newTab);
+			}
 			
 			mainTabPane.getTabs().add(newTab);
 			mainTabPane.getSelectionModel().select(newTab);
@@ -118,6 +122,15 @@ public class MainWindowController {
 			System.err.println("Error al abrir la vista " + title);
 			e.printStackTrace();
 		}
+    }
+    
+    public void closeTab(Tab tab) {
+        if (tab != null) {
+            TabPane tabPane = tab.getTabPane();
+            if (tabPane != null) {
+                tabPane.getTabs().remove(tab);
+            }
+        }
     }
     
     public void setStatusMessage(StatusMessage statusMessage) {

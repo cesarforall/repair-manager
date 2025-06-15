@@ -4,16 +4,21 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -27,9 +32,12 @@ import service.RepuestoService;
 import service.ServiceException;
 import util.GenericContextMenuBuilder;
 import util.LoggerUtil;
+import util.StatusAware;
+import util.StatusMessage;
 import util.TableColumnBuilder;
+import util.StatusMessage.Type;
 
-public class RepairViewController {
+public class RepairViewController implements StatusAware{
 	@FXML
 	Label repairIdLabel;
 	@FXML
@@ -67,8 +75,12 @@ public class RepairViewController {
 	@FXML
 	private Label profitLabel;
 
+	private MainWindowController mainWindowController;
+	Tab repairTab;
 	
 	Label placeholderLabel;
+	
+	private Consumer<StatusMessage> statusMessageCallback;
 	
 	private Reparacion repair;
 	
@@ -100,6 +112,14 @@ public class RepairViewController {
 	
 	public void setRepair(Reparacion repair) {
 		this.repair = repair;
+	}
+	
+	public void setMainWindowController(MainWindowController mainWindowController) {
+	    this.mainWindowController = mainWindowController;
+	}
+	
+	public void setCurrentTab(Tab repairTab) {
+		this.repairTab = repairTab;
 	}
 	
 	public void addPart() {
@@ -276,6 +296,39 @@ public class RepairViewController {
         }
     }
 
+    @FXML
+    private void deleteRepair() {
+    	if (repair != null) {
+    		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmación de eliminación");
+    		alert.setHeaderText("¿Seguro que deseas eliminar la reparación R" + this.repair.getIdReparacion() + "?");
+    		alert.setContentText("Esta opción no se puede deshacer");
+    		
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if (result.isPresent() && result.get() == ButtonType.OK) {
+    			try {
+    				ReparacionService reparacionService = new ReparacionService();
+    				reparacionService.delete(repair);
+    				
+        			updateStatusMessage(new StatusMessage(Type.INFO, "Se ha eliminado R" + this.repair.getIdReparacion() + "."));
+				} catch (ServiceException e) {
+					Platform.runLater(() -> {
+						updateStatusMessage(new StatusMessage(Type.ERROR, "Se ha producido un error al eliminar la reparacion"));						
+					});
+					LoggerUtil.logError(e.getMessage(), e);
+				}    			
+    		}
+    		mainWindowController.closeTab(repairTab);    		
+    	}
+    }
+    
+    private void updateStatusMessage(StatusMessage statusMessage) {
+    	if (statusMessageCallback != null) {
+    		Platform.runLater(() -> {
+    			statusMessageCallback.accept(new StatusMessage(statusMessage.getType(), statusMessage.getMessage()));
+    		});
+    	}
+    }
  
     private void addContextMenu() {
         GenericContextMenuBuilder.attach(partsTable, part -> {
@@ -291,4 +344,9 @@ public class RepairViewController {
 	    LocalDate localDate = LocalDate.parse(date, inputFormatter);
 	    return localDate.format(outputFormatter);
 	}
+
+	@Override
+	public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
+    	this.statusMessageCallback = statusMessageCallback;
+    }
 }

@@ -11,6 +11,8 @@ import service.ReparacionService;
 import service.ServiceException;
 import util.GenericContextMenuBuilder;
 import util.LoggerUtil;
+import util.StatusMessage;
+import util.StatusMessage.Type;
 import util.TableColumnBuilder;
 
 import java.util.Arrays;
@@ -92,15 +94,27 @@ public class RepairsViewController {
     	});
     }
     
-    private void openRepairTab(Reparacion reparacion) {
-    	String repairId = "R" + Integer.toString(reparacion.getIdReparacion());
+    private void openRepairTab(Reparacion currentRepair) {
+    	ReparacionService reparacionService = new ReparacionService();
+    	Reparacion repair;
     	try {
-    		String fxmlPath = "/views/repairView.fxml";
-			mainWindowController.openTab(repairId, fxmlPath , false, reparacion);
-			
+			repair = reparacionService.findById(currentRepair.getIdReparacion());			
+			if (repair != null) {
+				String repairId = "R" + Integer.toString(currentRepair.getIdReparacion());
+		    	try {
+		    		String fxmlPath = "/views/repairView.fxml";
+					mainWindowController.openTab(repairId, fxmlPath , false, currentRepair);
+					
+				} catch (Exception e) {
+					throw new ControllerException(e.getMessage(), e);
+				}
+			} else {
+				mainWindowController.setStatusMessage(new StatusMessage(Type.ERROR, "Si realizaste cambios previamente, pulsa \"Refrescar\" para actualizar la tabla."));
+			}			
 		} catch (Exception e) {
-			throw new ControllerException(e.getMessage(), e);
-		}    	
+			mainWindowController.setStatusMessage(new StatusMessage(Type.ERROR, "Ha habido un error al abrir la reparación."));
+			LoggerUtil.logError(e.getMessage(), e);
+		}    	    	
     }
     
     private void deleteRepair(Reparacion reparacion) {
