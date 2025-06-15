@@ -68,7 +68,7 @@
                               <TextArea fx:id="commentsTextArea" prefHeight="200.0" prefWidth="200.0" />
                            </children>
                         </VBox>
-                        <Button mnemonicParsing="false" onAction="#updateComment" text="Guardar" />
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#updateComment" text="Guardar" />
                         <Label text="Análisis financiero:">
                            <font>
                               <Font name="System Bold" size="14.0" />
@@ -128,8 +128,8 @@
                               <TextField fx:id="quantityTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label text="Componente:" />
                               <Label text="Cantidad:" GridPane.rowIndex="1" />
-                              <Button onAction="#loadParts" text="Refrescar" GridPane.columnIndex="2" />
-                              <Button onAction="#addPart" text="Añadir" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Button fx:id="refreshPartsButton" onAction="#loadParts" text="Refrescar" GridPane.columnIndex="2" />
+                              <Button fx:id="addPartButton" onAction="#addPart" text="Añadir" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                         <HBox alignment="CENTER_LEFT">
@@ -156,8 +156,8 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" text="Finalizar" />
-                  <Button mnemonicParsing="false" onAction="#deleteRepair" text="Eliminar" />
+                  <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishRepair" text="Finalizar" />
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteRepair" text="Eliminar" />
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" />

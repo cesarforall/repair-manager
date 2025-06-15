@@ -74,6 +74,16 @@ public class RepairViewController implements StatusAware{
 	private Label totalLabel;
 	@FXML
 	private Label profitLabel;
+	@FXML
+	private Button saveButton;
+	@FXML
+	private Button refreshPartsButton;
+	@FXML
+	private Button addPartButton;
+	@FXML
+	private Button finishButton;
+	@FXML
+	private Button deleteButton;
 
 	private MainWindowController mainWindowController;
 	Tab repairTab;
