@@ -63,6 +63,14 @@ public class RepuestoReparacionService implements IGenericService<RepuestoRepara
             throw new ServiceException("Error al buscar RepuestoReparacion por ID.", e);
         }
     }
+    
+    public List<RepuestoReparacion> findByRepairId(int repairId) {
+        try {
+            return dao.findByReparacion(repairId);
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener componentes por reparación.", e);
+        }
+    }
 
     @Override
     public List<RepuestoReparacion> findAll() {
