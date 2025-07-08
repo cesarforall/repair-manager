@@ -29,3 +29,9 @@ Thumbs.db
 *.jar
 *.war
 *.ear
+
+# Ignorar archivo dependency-reduced-pom.xml
+dependency-reduced-pom.xml
+
+# Ignorar carpeta VulcanoLite
+VulcanoLite/
