@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RepairViewController">
+<ScrollPane xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RepairViewController">
    <content>
       <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="10.0">
          <children>
