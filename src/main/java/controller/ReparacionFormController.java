@@ -1,5 +1,8 @@
 package controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -75,6 +78,25 @@ public class ReparacionFormController {
 				Reparacion reparacion = new Reparacion(dispositivo, cliente, estado, detalle, fechaEntrada.toString(), null, null, 0.0, 0.0);
 				
 				reparacionService.save(reparacion);
+							
+				try {
+					int repairId = reparacion.getIdReparacion();
+					Path dirPath = Paths.get("docs", String.valueOf(repairId));
+					int count = 1;						
+					
+					while (Files.exists(dirPath)) {
+						dirPath = Paths.get("docs", String.valueOf(repairId) + " (" + String.valueOf(count++) + ")");
+					}
+					
+					Files.createDirectories(dirPath);
+					
+					reparacion.setEnlaceDocumento(dirPath.toAbsolutePath().toString());
+					reparacionService.update(reparacion);
+					
+				} catch (Exception e) {
+					System.out.println("No se ha podido crear la carpeta.");
+				}
+				
 				messageLabel.setStyle("-fx-text-fill: green;");
 				messageLabel.setText("Reparación añadida correctamente.");
 				

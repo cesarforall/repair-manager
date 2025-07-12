@@ -3,29 +3,40 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.Callback;
 import model.Reparacion;
 import service.ReparacionService;
 import service.ServiceException;
 import util.GenericContextMenuBuilder;
 import util.LoggerUtil;
+import util.StatusAware;
 import util.StatusMessage;
 import util.StatusMessage.Type;
 import util.TableColumnBuilder;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class RepairsViewController {
+public class RepairsViewController implements StatusAware {
 	private MainWindowController mainWindowController;
+	
+	private Consumer<StatusMessage> statusMessageCallback;
 	
     @FXML
     private TableView<Reparacion> repairsTable;
@@ -59,9 +70,49 @@ public class RepairsViewController {
     	TableColumnBuilder.addColumn(repairsTable, "F. salida", 100, cellData ->
 			new SimpleObjectProperty<>(cellData.getValue().getFechaSalida())
     	);
-    	TableColumnBuilder.addColumn(repairsTable, "Enlace de documentos", 150, cellData ->
-			new SimpleObjectProperty<>(cellData.getValue().getEnlaceDocumento())
+    	TableColumn<Reparacion, String> docLinkColumn = new TableColumn<>("Enlace de documentos");
+    	docLinkColumn.setPrefWidth(150);
+    	docLinkColumn.setCellValueFactory(cellData ->
+    	    new SimpleObjectProperty<>(cellData.getValue().getEnlaceDocumento())
     	);
+
+    	docLinkColumn.setCellFactory(new Callback<TableColumn<Reparacion, String>, TableCell<Reparacion, String>>() {
+    	    @Override
+    	    public TableCell<Reparacion, String> call(TableColumn<Reparacion, String> param) {
+    	        return new TableCell<>() {
+    	            private final Hyperlink link = new Hyperlink("Abrir carpeta");
+
+    	            {
+    	            	link.setStyle("-fx-text-fill: blue;");
+    	            	
+    	                link.setOnAction(e -> {
+    	                    String path = getItem();
+    	                    if (path != null && !path.isBlank()) {
+    	                    	File file = new File(path);
+    	                    	if (file.exists()) {
+    	                    		try {
+        	                            Desktop.getDesktop().open(new File(path));
+        	                        } catch (IOException ex) {
+        	                        	updateStatusMessage(new StatusMessage(StatusMessage.Type.ERROR, "Error al abrir la carpeta"));
+        	                        }
+								} else {
+									updateStatusMessage(new StatusMessage(StatusMessage.Type.ERROR, "La carpeta ya no existe. Es posible que haya sido movida o eliminada."));
+								}    	                        
+    	                    }
+    	                });
+    	            }
+
+    	            @Override
+    	            protected void updateItem(String item, boolean empty) {
+    	                super.updateItem(item, empty);
+    	                setGraphic((empty || item == null || item.isBlank()) ? null : link);
+    	            }
+    	        };
+    	    }
+    	});
+
+    	repairsTable.getColumns().add(docLinkColumn);
+
     	TableColumnBuilder.addColumn(repairsTable, "Total", 100, cellData -> {
     	    double ingresos = cellData.getValue().getIngresos();
     	    double gastos = cellData.getValue().getGastos();
@@ -164,5 +215,19 @@ public class RepairsViewController {
     	if (repairs == null || repairs.isEmpty()) {
             repairsTable.setPlaceholder(new Label("No se encontraron reparaciones en la base de datos."));
         }
+    }
+
+	@Override
+	public void setStatusCallback(Consumer<StatusMessage> callback) {
+		this.statusMessageCallback = callback;		
+	}
+	
+    
+    private void updateStatusMessage(StatusMessage statusMessage) {
+    	if (statusMessageCallback != null) {
+    		Platform.runLater(() -> {
+    			statusMessageCallback.accept(new StatusMessage(statusMessage.getType(), statusMessage.getMessage()));
+    		});
+    	}
     }
 }
