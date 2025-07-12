@@ -1,4 +1,7 @@
+# Ignorar archivos generados por el proyecto
 vulcano-lite.db
+/logs/
+
 # Ignorar la carpeta target/ (generada por Maven)
 /target/
 
