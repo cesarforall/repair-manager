@@ -52,4 +52,12 @@ public class DispositivoService {
             throw new ServiceException("Error en DispositivoService al obtener todos los dispositivos.", e);
         }
     }
+    
+    public List<Dispositivo> findAllAvailable() {
+        try {
+            return dispositivoDAO.findAllAvailable();
+        } catch (Exception e) {
+            throw new ServiceException("Error en DispositivoService al obtener todos los dispositivos disponibles.", e);
+        }
+    }
 }

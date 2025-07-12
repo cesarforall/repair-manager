@@ -1,5 +1,6 @@
 package dao;
 
+import java.beans.Statement;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -63,6 +64,28 @@ public class DispositivoDAO implements GenericDAO<Dispositivo>{
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
 			List<Dispositivo> dispositivos = session.createQuery("FROM Dispositivo", Dispositivo.class).getResultList();						
+			transaction.commit();
+			return dispositivos;
+		} catch (Exception e) {
+			throw new DAOException("Error al listar los dispositivos en la base de datos.", e);
+		}		
+	}
+	
+	public List<Dispositivo> findAllAvailable() {
+		Transaction transaction = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			transaction = session.beginTransaction();			
+			String hql = """
+				    SELECT d
+				    FROM Dispositivo d
+				    WHERE NOT EXISTS (
+				        SELECT 1
+				        FROM Reparacion r
+				        WHERE r.dispositivo = d
+				        AND LOWER(r.estado.nombre) <> 'cerrada'
+				    )
+				    """;
+			List<Dispositivo> dispositivos = session.createQuery(hql, Dispositivo.class).getResultList();						
 			transaction.commit();
 			return dispositivos;
 		} catch (Exception e) {

@@ -102,6 +102,7 @@ public class ReparacionFormController {
 				
 				fechaEntradaDatePicker.setValue(LocalDate.now());
 	            dispositivoComboBox.setValue(null);
+	            updateDispositivoComboBox();
 	            clienteComboBox.setValue(null);
 	            estadoComboBox.setValue(null);
 	            detalleTextField.clear();		
@@ -116,7 +117,7 @@ public class ReparacionFormController {
 	private void updateDispositivoComboBox() {
 		new Thread(() -> {
 			dispositivoService = new DispositivoService();
-			List<Dispositivo> dispositivos = dispositivoService.findAll();
+			List<Dispositivo> dispositivos = dispositivoService.findAllAvailable();
 
 			Platform.runLater(() -> {
 				dispositivoComboBox.setItems(FXCollections.observableArrayList(dispositivos));
