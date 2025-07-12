@@ -54,7 +54,7 @@
                               <Label fx:id="clientLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label text="Fecha de entrada:" GridPane.rowIndex="3" />
                               <Label fx:id="inDateLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="Fecha de salida:" GridPane.rowIndex="4" />
+                              <Label text="Fecha de cierre:" GridPane.rowIndex="4" />
                               <Label fx:id="outDateLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Label text="Comentarios:" GridPane.rowIndex="5">
                                  <font>
@@ -90,14 +90,14 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
 						<children>
-						    <Label text="Total ingresos:" />
+						    <Label text="Ingresos totales (€):" />
 						    <TextField fx:id="incomeTextField" GridPane.columnIndex="1" />
-						    <Button onAction="#addIncomeAndUpdate" text="Añadir" fx:id="addIncomeButton" GridPane.columnIndex="2" />
-						    <Label text="Gastos:" GridPane.rowIndex="1" />
+						    <Button fx:id="addIncomeButton" onAction="#addIncomeAndUpdate" text="Actualizar" GridPane.columnIndex="2" />
+						    <Label text="Gastos acumulados:" GridPane.rowIndex="1" />
 						    <Label fx:id="expensesLabel" text="0 €" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-						    <Label text="Total:" GridPane.rowIndex="2" />
+						    <Label text="Balance total:" GridPane.rowIndex="2" />
 						    <Label fx:id="totalLabel" text="0 €" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-						    <Label text="Beneficio:" GridPane.rowIndex="3" />
+						    <Label text="Margen de beneficio:" GridPane.rowIndex="3" />
 						    <Label fx:id="profitLabel" text="0 %" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 						</children>
                         </GridPane>
@@ -138,7 +138,20 @@
                            </children>
                         </HBox>
                         <TableView fx:id="partsTable" />
-                        <VBox />
+                        <HBox>
+                           <children>
+                              <Label text="Ruta de documentos:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="pathLabel" onMouseClicked="#openDocumentFolder" style="-fx-text-fill: blue; -fx-underline: true; -fx-cursor: hand">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -156,7 +169,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishRepair" text="Finalizar" />
+                  <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishRepair" text="Cerrar reparación" />
                   <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteRepair" text="Eliminar" />
                </children>
                <padding>
