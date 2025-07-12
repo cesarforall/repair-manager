@@ -146,14 +146,11 @@ public class RepairsViewController implements StatusAware {
 		}    	
     	
     	GenericContextMenuBuilder.attach(repairsTable, repair -> {
-    		MenuItem delete = new MenuItem("Eliminar");
-    		delete.setOnAction(e -> deleteRepair(repair));
-    		
     		MenuItem view = new MenuItem("Ver");
     		view.setOnAction(e -> openRepairTab(repair));
     		
     		if (repair.getEstado().getNombre().equalsIgnoreCase("Cerrada")) {
-    			return Arrays.asList(delete, view);
+    			return Arrays.asList(view);
 			} else {
 				Menu statesItem = new Menu("Cambiar estado");
 
@@ -165,7 +162,7 @@ public class RepairsViewController implements StatusAware {
         			});
         			statesItem.getItems().add(stateItem);
         		}
-    			return Arrays.asList(delete, view, statesItem);
+    			return Arrays.asList(view, statesItem);
 
 			}
     	});
