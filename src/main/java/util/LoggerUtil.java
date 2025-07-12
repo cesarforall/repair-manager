@@ -1,5 +1,8 @@
 package util;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,8 +21,16 @@ public class LoggerUtil {
 	                    rootLogger.removeHandler(handler);
 	                }
 	            }
+	            
+	            Path logDir = Paths.get("logs");
+	            if (!Files.exists(logDir)) {
+	            	Files.createDirectories(logDir);
+	            }
+	            
+	            Path logFile = logDir.resolve("vulcano-lite.log");
 				
-			    fh = new FileHandler("vulcano-lite.log", true);
+			    fh = new FileHandler(logFile.toString(), true);
+			    
 			    fh.setFormatter(new SimpleFormatter());
 			    logger.addHandler(fh);
 			    logger.setLevel(Level.ALL);
