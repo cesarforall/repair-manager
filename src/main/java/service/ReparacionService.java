@@ -7,6 +7,7 @@ import dao.DispositivoDAO;
 import dao.EstadoDAO;
 import dao.ReparacionDAO;
 import dao.RepuestoReparacionDAO;
+import model.Estado;
 import model.Reparacion;
 
 public class ReparacionService {
@@ -80,5 +81,11 @@ public class ReparacionService {
         } catch (Exception e) {
         	throw new ServiceException("Error en ReparacionService al obtener todas las Reparaciones.", e);
         }
+    }
+    
+    public void updateState(Reparacion reparacion, Estado estado) throws ServiceException {
+    	reparacion.setEstado(estado);
+    	
+    	reparacionDAO.update(reparacion);
     }
 }

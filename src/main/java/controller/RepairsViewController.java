@@ -5,12 +5,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
+import model.Estado;
 import model.Reparacion;
+import service.EstadoService;
 import service.ReparacionService;
 import service.ServiceException;
 import util.GenericContextMenuBuilder;
@@ -134,6 +137,14 @@ public class RepairsViewController implements StatusAware {
     }
     
     private void addContextMenu() {
+    	List<Estado> estados;
+    	try {
+    		EstadoService estadoService = new EstadoService();        	
+    		estados = estadoService.findAll().stream().filter(e -> !e.getNombre().equalsIgnoreCase("Cerrada")).toList();
+		} catch (Exception e) {
+			throw new ControllerException("Error al obtener los estados.");
+		}    	
+    	
     	GenericContextMenuBuilder.attach(repairsTable, repair -> {
     		MenuItem delete = new MenuItem("Eliminar");
     		delete.setOnAction(e -> deleteRepair(repair));
@@ -141,7 +152,22 @@ public class RepairsViewController implements StatusAware {
     		MenuItem view = new MenuItem("Ver");
     		view.setOnAction(e -> openRepairTab(repair));
     		
-    		return Arrays.asList(delete, view);
+    		if (repair.getEstado().getNombre().equalsIgnoreCase("Cerrada")) {
+    			return Arrays.asList(delete, view);
+			} else {
+				Menu statesItem = new Menu("Cambiar estado");
+
+        		for (Estado estado : estados) {
+        			MenuItem stateItem = new MenuItem(estado.getNombre());
+        			stateItem.setOnAction(e -> {
+        				ReparacionService.updateState(repair, estado);
+        				refreshRepairs();
+        			});
+        			statesItem.getItems().add(stateItem);
+        		}
+    			return Arrays.asList(delete, view, statesItem);
+
+			}
     	});
     }
     
