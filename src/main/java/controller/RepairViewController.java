@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -75,6 +77,8 @@ public class RepairViewController implements StatusAware{
 	private Label totalLabel;
 	@FXML
 	private Label profitLabel;
+	@FXML
+	private Label pathLabel;
 	@FXML
 	private Button saveButton;
 	@FXML
@@ -213,6 +217,7 @@ public class RepairViewController implements StatusAware{
 	            outDateLabel.setText(formatEntryDate(repair.getFechaSalida()) != null ? formatEntryDate(repair.getFechaSalida()) : "");
 	            commentsTextArea.setText(repair.getDetalle());
 	            incomeTextField.setText(String.valueOf(repair.getIngresos()));
+	            pathLabel.setText(repair.getEnlaceDocumento());
 	
 	            double expenses = new RepuestoReparacionService().calculateTotalByRepair(repair.getIdReparacion());
 	            double income = repair.getIngresos();
@@ -371,8 +376,8 @@ public class RepairViewController implements StatusAware{
     	if (finishButton.isDisabled()) return;
 
     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    	alert.setTitle("Confirmación de finalización");
-    	alert.setHeaderText("¿Seguro que deseas finalizar esta reparación?");
+    	alert.setTitle("Confirmación de cierre");
+    	alert.setHeaderText("¿Seguro que deseas cerrar esta reparación?");
     	alert.setContentText("No se podrán modificar los datos.");
 
     	Optional<ButtonType> result = alert.showAndWait();
@@ -461,6 +466,19 @@ public class RepairViewController implements StatusAware{
             return Arrays.asList(delete);
         });
     }
+    
+    @FXML
+    private void openDocumentFolder() {
+		String path = repair.getEnlaceDocumento();
+		if (path != null && !path.isEmpty()) {
+			try {
+				Desktop.getDesktop().open(new File(path));
+			} catch (Exception e) {
+				updateStatusMessage(new StatusMessage(StatusMessage.Type.ERROR, "La carpeta ya no existe. Es posible que haya sido movida o eliminada."));
+				LoggerUtil.logError("Error al abrir la carpeta.", e);
+			}
+		}
+	}
 	
     public String formatEntryDate(String date) {
         if (date == null) return "";
