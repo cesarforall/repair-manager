@@ -3,7 +3,6 @@ package controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +38,7 @@ import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
 import util.StatusMessage.Type;
+import util.Utils;
 
 public class RepairViewController implements StatusAware{
 	@FXML
@@ -99,19 +99,21 @@ public class RepairViewController implements StatusAware{
 	
 	private Reparacion repair;
 	
+	Utils utils = new Utils();
+	
 	ComponenteService componenteService = new ComponenteService();
 	ComponenteReparacionService componenteReparacionService = new ComponenteReparacionService();
 	
 	@FXML
 	public void initialize() {
 		TableColumnBuilder.addColumn(partsTable, "Id", 80, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getComponente().getidComponente()));
+		new SimpleObjectProperty<>(Utils.formatIntToId("C", cellData.getValue().getComponente().getidComponente())));
 		
 		TableColumnBuilder.addColumn(partsTable, "Nombre", 200, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getComponente().getNombre()));
 		
-		TableColumnBuilder.addColumn(partsTable, "Precio", 100, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getComponente().getPrecio()));
+		TableColumnBuilder.addColumn(partsTable, "Valor", 100, cellData ->
+		new SimpleObjectProperty<>(Utils.formatDoubleToEuros(cellData.getValue().getComponente().getPrecio() * cellData.getValue().getCantidad())));
 		
 		TableColumnBuilder.addColumn(partsTable, "Cantidad", 100, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getCantidad()));
@@ -150,6 +152,9 @@ public class RepairViewController implements StatusAware{
 	    } else if(quantityText.isBlank()){
 	    	partsMessageLabel.setStyle("-fx-text-fill: red;");
 	        partsMessageLabel.setText("El campo \"Cantidad\" es obligatorio.");
+	    }else if (!quantityText.matches("\\d+")) {
+	    	partsMessageLabel.setStyle("-fx-text-fill: red;");
+	        partsMessageLabel.setText("La cantidad debe ser un número entero positivo.");
 	    }else if(Integer.parseInt(quantityText) <= 0){
 	    	partsMessageLabel.setStyle("-fx-text-fill: red;");
 	        partsMessageLabel.setText("La cantidad no puede ser inferior a 1.");
@@ -209,14 +214,14 @@ public class RepairViewController implements StatusAware{
 	private void loadRepair() {
 	    Platform.runLater(() -> {
 	        if (repair != null) {
-	            repairIdLabel.setText("Reparación: " + repair.getIdReparacion());
+	            repairIdLabel.setText("Reparación: " + Utils.formatIntToId("R", repair.getIdReparacion()));
 	            stateLabel.setText(repair.getEstado().getNombre());
 	            deviceLabel.setText(repair.getDispositivo().getNombre());
 	            clientLabel.setText(repair.getCliente().getNombre());
-	            inDateLabel.setText(formatEntryDate(repair.getFechaEntrada()));
-	            outDateLabel.setText(formatEntryDate(repair.getFechaSalida()) != null ? formatEntryDate(repair.getFechaSalida()) : "");
+	            inDateLabel.setText(Utils.formatEntryDate(repair.getFechaEntrada()));
+	            outDateLabel.setText(Utils.formatEntryDate(repair.getFechaSalida()) != null ? Utils.formatEntryDate(repair.getFechaSalida()) : "");
 	            commentsTextArea.setText(repair.getDetalle());
-	            incomeTextField.setText(String.valueOf(repair.getIngresos()));
+	            incomeTextField.setText(Utils.formatDoubleToMoney(repair.getIngresos()));
 	            pathLabel.setText(repair.getEnlaceDocumento());
 	
 	            double expenses = new ComponenteReparacionService().calculateTotalByRepair(repair.getIdReparacion());
@@ -224,8 +229,8 @@ public class RepairViewController implements StatusAware{
 	            double total = income - expenses;
 	            double profit = (income == 0) ? 0 : (total / income) * 100;
 	
-	            expensesLabel.setText(expenses + " €");
-	            totalLabel.setText(total + " €");
+	            expensesLabel.setText(Utils.formatDoubleToEuros(expenses));
+	            totalLabel.setText(Utils.formatDoubleToEuros(total));
 	            profitLabel.setText(String.format("%.2f", profit) + " %");
 	
 	            if (repair.getEstado().getNombre().equalsIgnoreCase("Cerrada")) {
@@ -320,14 +325,23 @@ public class RepairViewController implements StatusAware{
     	if (addIncomeButton.isDisabled()) return;
     	
         try {
-            double income = incomeTextField.getText().isBlank() ? 0 : Double.parseDouble(incomeTextField.getText());
+        	if (!incomeTextField.getText().matches("\\d+(\\.|,)?\\d*")) {
+        		messageLabel.setStyle("-fx-text-fill: red;");
+        	    messageLabel.setText("El campo \"Ingresos\" debe ser un número válido.");
+        	    return;
+        	}
+        	
+        	String incomeString = incomeTextField.getText().replace(",", ".");        	
+            double income = incomeString.isBlank() ? 0 : Double.parseDouble(incomeString);
+            
             ComponenteReparacionService service = new ComponenteReparacionService();
             double expenses = service.calculateTotalByRepair(repair.getIdReparacion());
             double total = income - expenses;
             double profit = (income == 0) ? 0 : (total / income) * 100;
 
-            expensesLabel.setText(expenses + " €");
-            totalLabel.setText(total + " €");
+            incomeTextField.setText(Utils.formatDoubleToMoney(income));
+            expensesLabel.setText(Utils.formatDoubleToEuros(expenses));
+            totalLabel.setText(Utils.formatDoubleToEuros(total));
             profitLabel.setText(String.format("%.2f", profit) + " %");
 
             repair.setIngresos(income);
@@ -400,7 +414,7 @@ public class RepairViewController implements StatusAware{
     			repairService.update(finishedRepair);
 
     			repair.setFechaSalida(finishedRepair.getFechaSalida());
-    			outDateLabel.setText(formatEntryDate(finishedRepair.getFechaSalida()));
+    			outDateLabel.setText(Utils.formatEntryDate(finishedRepair.getFechaSalida()));
 
     			disableInputs();
     		} catch (Exception e) {
@@ -480,15 +494,6 @@ public class RepairViewController implements StatusAware{
 		}
 	}
 	
-    public String formatEntryDate(String date) {
-        if (date == null) return "";
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate localDate = LocalDate.parse(date, inputFormatter);
-        return localDate.format(outputFormatter);
-    }
-
-
 	@Override
 	public void setStatusCallback(Consumer<StatusMessage> statusMessageCallback) {
     	this.statusMessageCallback = statusMessageCallback;
