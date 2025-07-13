@@ -15,6 +15,7 @@
          <menus>
             <Menu fx:id="fileMenu" text="Archivo" />
             <Menu fx:id="viewMenu" text="Ver" />
+            <Menu fx:id="helpMenu" text="Ayuda" />
          </menus>
       </MenuBar>
    </top>

@@ -16,7 +16,7 @@ public class Main extends Application {
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
-            primaryStage.setTitle("Vulcano Lite");
+            primaryStage.setTitle("Vulcano Lite 0.0.1-SNAPSHOT");
             primaryStage.setScene(scene);
             primaryStage.show();            
             

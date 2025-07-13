@@ -4,11 +4,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.Region;
 import model.Reparacion;
 import util.StatusAware;
 import util.StatusMessage;
@@ -20,7 +22,9 @@ public class MainWindowController {
     @FXML
     private Menu fileMenu;
     @FXML
-    private Menu viewMenu;
+    private Menu viewMenu;    
+    @FXML
+    private Menu helpMenu;
     
     @FXML
     private Label statusMessageLabel;
@@ -38,6 +42,8 @@ public class MainWindowController {
     	createMenuItem(viewMenu, "Componentes", this::openPartsView);
     	createMenuItem(viewMenu, "Estados", this::openStatesView);
     	createMenuItem(viewMenu, "Reparaciones", this::openRepairsView);
+    	
+    	createMenuItem(helpMenu, "Ayuda", this::openHelpAlert);
     	
     	statusMessageLabel.setText("Vulcano Lite ha iniciado correctamente.");
     }
@@ -73,6 +79,20 @@ public class MainWindowController {
     public void openRepairsView() {
     	openTab("Reparaciones", "/views/repairsView.fxml", true);
     }
+    
+    public void openHelpAlert() {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Información Beta");
+		alert.setHeaderText("Gracias por probar la versión beta.");
+		alert.setContentText(
+			    "Para cualquier duda o sugerencia, contacta con:\n\n" +
+			    "Nombre: César Almeida\n" +
+			    "GitHub: https://github.com/cesarforall\n\n" +
+			    "¡Gracias por tu apoyo!"
+			);
+		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.showAndWait();
+	}
     
     private void createMenuItem(Menu menu, String text, Runnable action) {
     	MenuItem item = new MenuItem(text);
