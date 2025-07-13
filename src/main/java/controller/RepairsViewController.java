@@ -175,7 +175,7 @@ public class RepairsViewController implements StatusAware {
     	try {
 			repair = reparacionService.findById(currentRepair.getIdReparacion());			
 			if (repair != null) {
-				String repairId = "R" + Integer.toString(currentRepair.getIdReparacion());
+				String repairId = Utils.formatIntToId("R", currentRepair.getIdReparacion());
 		    	try {
 		    		String fxmlPath = "/views/repairView.fxml";
 					mainWindowController.openTab(repairId, fxmlPath , false, currentRepair);
