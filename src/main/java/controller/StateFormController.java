@@ -36,8 +36,8 @@ public class StateFormController {
 				nameTextField.setText(null);
 				descriptionTextField.setText(null);
 			} catch (Exception e) {
-				System.err.println("Error en EstadosController al añadir Estado.");
-				e.printStackTrace();
+				messageLabel.setStyle("-fx-text-fill: red;");
+		        messageLabel.setText("Este estado ya existe. Añada uno distinto.");
 			}
 		}
 	}

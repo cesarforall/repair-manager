@@ -39,7 +39,7 @@
                <children>
                   <Label text="Nombre:" />
                   <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
-                  <Label text="Descripción" GridPane.rowIndex="1" />
+                  <Label text="Descripción:" GridPane.rowIndex="1" />
                   <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>

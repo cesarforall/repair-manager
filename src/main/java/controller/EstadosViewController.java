@@ -23,6 +23,7 @@ import util.LoggerUtil;
 import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
+import util.Utils;
 import util.StatusMessage.Type;
 
 public class EstadosViewController implements StatusAware {
@@ -38,7 +39,7 @@ public class EstadosViewController implements StatusAware {
 	@FXML
     public void initialize() {
     	TableColumnBuilder.addColumn(estadosTable, "Id", 80, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getIdEstado()));
+		new SimpleObjectProperty<>(Utils.formatIntToId("E", cellData.getValue().getIdEstado())));
 		
 		TableColumnBuilder.addColumn(estadosTable, "Nombre", 200, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getNombre()));
