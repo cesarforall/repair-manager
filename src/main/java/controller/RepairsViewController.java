@@ -22,6 +22,7 @@ import util.StatusAware;
 import util.StatusMessage;
 import util.StatusMessage.Type;
 import util.TableColumnBuilder;
+import util.Utils;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -52,8 +53,8 @@ public class RepairsViewController implements StatusAware {
 
     @FXML
     public void initialize() {
-    	TableColumnBuilder.addColumn(repairsTable, "Id", 50, cellData ->
-    		new SimpleObjectProperty<>(cellData.getValue().getIdReparacion())
+    	TableColumnBuilder.addColumn(repairsTable, "Id", 80, cellData ->
+    		new SimpleObjectProperty<>(Utils.formatIntToId("R", cellData.getValue().getIdReparacion()))
     	);    	
     	TableColumnBuilder.addColumn(repairsTable, "Estado", 150, cellData ->
     		new SimpleObjectProperty<>(cellData.getValue().getEstado().getNombre())
@@ -64,16 +65,16 @@ public class RepairsViewController implements StatusAware {
     	TableColumnBuilder.addColumn(repairsTable, "Cliente", 200, cellData ->
 			new SimpleObjectProperty<>(cellData.getValue().getCliente().getNombre())
     	);
-    	TableColumnBuilder.addColumn(repairsTable, "Detalle", 200, cellData ->
+    	TableColumnBuilder.addColumn(repairsTable, "Comentarios", 200, cellData ->
 			new SimpleObjectProperty<>(cellData.getValue().getDetalle())
     	);
-    	TableColumnBuilder.addColumn(repairsTable, "F. entrada", 100, cellData ->
-			new SimpleObjectProperty<>(cellData.getValue().getFechaEntrada())
+    	TableColumnBuilder.addColumn(repairsTable, "Fecha de entrada", 120, cellData ->
+			new SimpleObjectProperty<>(Utils.formatEntryDate(cellData.getValue().getFechaEntrada()))
     	);
-    	TableColumnBuilder.addColumn(repairsTable, "F. salida", 100, cellData ->
-			new SimpleObjectProperty<>(cellData.getValue().getFechaSalida())
+    	TableColumnBuilder.addColumn(repairsTable, "Fecha de cierre", 120, cellData ->
+			new SimpleObjectProperty<>(Utils.formatEntryDate(cellData.getValue().getFechaSalida()))
     	);
-    	TableColumn<Reparacion, String> docLinkColumn = new TableColumn<>("Enlace de documentos");
+    	TableColumn<Reparacion, String> docLinkColumn = new TableColumn<>("Ruta de documentos");
     	docLinkColumn.setPrefWidth(150);
     	docLinkColumn.setCellValueFactory(cellData ->
     	    new SimpleObjectProperty<>(cellData.getValue().getEnlaceDocumento())
@@ -116,11 +117,11 @@ public class RepairsViewController implements StatusAware {
 
     	repairsTable.getColumns().add(docLinkColumn);
 
-    	TableColumnBuilder.addColumn(repairsTable, "Total", 100, cellData -> {
+    	TableColumnBuilder.addColumn(repairsTable, "Balance total", 100, cellData -> {
     	    double ingresos = cellData.getValue().getIngresos();
     	    double gastos = cellData.getValue().getGastos();
     	    double total = ingresos - gastos;
-    	    return new SimpleObjectProperty<>(total);
+    	    return new SimpleObjectProperty<>(String.format("%.2f", total) + " €");
     	});
 
     	
