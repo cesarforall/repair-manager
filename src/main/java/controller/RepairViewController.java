@@ -216,7 +216,7 @@ public class RepairViewController implements StatusAware{
 	        if (repair != null) {
 	            repairIdLabel.setText("Reparación: " + Utils.formatIntToId("R", repair.getIdReparacion()));
 	            stateLabel.setText(repair.getEstado().getNombre());
-	            deviceLabel.setText(repair.getDispositivo().getNombre());
+	            deviceLabel.setText(Utils.formatIntToId("D", repair.getDispositivo().getIdDispositivo()) + " " + repair.getDispositivo().getTipo() + " " + repair.getDispositivo().getFabricante() + " " + repair.getDispositivo().getModelo());
 	            clientLabel.setText(repair.getCliente().getNombre());
 	            inDateLabel.setText(Utils.formatEntryDate(repair.getFechaEntrada()));
 	            outDateLabel.setText(Utils.formatEntryDate(repair.getFechaSalida()) != null ? Utils.formatEntryDate(repair.getFechaSalida()) : "");

@@ -23,6 +23,7 @@ import util.LoggerUtil;
 import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
+import util.Utils;
 import util.StatusMessage.Type;
 
 public class DevicesViewController implements StatusAware {
@@ -38,10 +39,13 @@ public class DevicesViewController implements StatusAware {
 	@FXML
     public void initialize() {
 		TableColumnBuilder.addColumn(devicesTable, "Id", 80, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getIdDispositivo()));
+		new SimpleObjectProperty<>(Utils.formatIntToId("D", cellData.getValue().getIdDispositivo())));
 		
-		TableColumnBuilder.addColumn(devicesTable, "Nombre", 200, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getNombre()));
+		TableColumnBuilder.addColumn(devicesTable, "Tipo", 100, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getTipo()));
+		
+		TableColumnBuilder.addColumn(devicesTable, "Fabricante", 200, cellData ->
+		new SimpleObjectProperty<>(cellData.getValue().getFabricante()));
 		
 		TableColumnBuilder.addColumn(devicesTable, "Modelo", 200, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getModelo()));
@@ -83,7 +87,7 @@ public class DevicesViewController implements StatusAware {
     	if (dispositivo != null) {
     		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     		alert.setTitle("Confirmación de eliminación");
-    		alert.setHeaderText("¿Seguro que deseas eliminar \"" + dispositivo.getNombre() + "\"?");
+    		alert.setHeaderText("¿Seguro que deseas eliminar \"" + dispositivo.getFabricante() + dispositivo.getModelo() + "\"?");
     		alert.setContentText("Esta opción no se puede deshacer");
     		
     		Optional<ButtonType> result = alert.showAndWait();
@@ -92,7 +96,7 @@ public class DevicesViewController implements StatusAware {
     				DispositivoService dispositivoService = new DispositivoService();
     				dispositivoService.delete(dispositivo);
     				
-        			updateStatusMessage(new StatusMessage(Type.INFO, "Se ha eliminado \"" + dispositivo.getNombre() + "\"."));
+        			updateStatusMessage(new StatusMessage(Type.INFO, "Se ha eliminado \"" + dispositivo.getFabricante() + dispositivo.getModelo() + "\"."));
 				} catch (ServiceException e) {
 					Platform.runLater(() -> {
 						updateStatusMessage(new StatusMessage(Type.ERROR, "Se ha producido un error al eliminar el dispositivo."));						

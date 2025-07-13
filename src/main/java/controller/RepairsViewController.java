@@ -60,7 +60,7 @@ public class RepairsViewController implements StatusAware {
     		new SimpleObjectProperty<>(cellData.getValue().getEstado().getNombre())
     	);
     	TableColumnBuilder.addColumn(repairsTable, "Dispositivo", 200, cellData ->
-			new SimpleObjectProperty<>(cellData.getValue().getDispositivo().getNombre())
+			new SimpleObjectProperty<>(Utils.formatIntToId("D", cellData.getValue().getDispositivo().getIdDispositivo()) + " " + cellData.getValue().getDispositivo().getTipo() + " " + cellData.getValue().getDispositivo().getFabricante())
     	);
     	TableColumnBuilder.addColumn(repairsTable, "Cliente", 200, cellData ->
 			new SimpleObjectProperty<>(cellData.getValue().getCliente().getNombre())

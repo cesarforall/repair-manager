@@ -23,6 +23,7 @@ import service.DispositivoService;
 import service.EstadoService;
 import service.ReparacionService;
 import service.ServiceException;
+import util.Utils;
 
 public class ReparacionFormController {
 	@FXML
@@ -124,7 +125,7 @@ public class ReparacionFormController {
 				dispositivoComboBox.setConverter(new StringConverter<Dispositivo>() {
 					@Override
 					public String toString(Dispositivo dispositivo) {
-						return dispositivo != null ? dispositivo.toString() : "";
+						return dispositivo != null ? Utils.formatIntToId("D", dispositivo.getIdDispositivo()) + " " + dispositivo.getTipo() + " " + dispositivo.getFabricante() : "";
 					}
 
 					@Override

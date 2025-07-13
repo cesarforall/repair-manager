@@ -49,7 +49,8 @@ public class HibernateUtil {
 				
 				CREATE TABLE IF NOT EXISTS DISPOSITIVOS (
 				    id_dispositivo INTEGER PRIMARY KEY,
-				    nombre TEXT NOT NULL,
+				    tipo TEXT NOT NULL,
+				    fabricante TEXT NOT NULL,
 				    modelo TEXT NOT NULL,
 				    n_serie TEXT UNIQUE NOT NULL
 				);

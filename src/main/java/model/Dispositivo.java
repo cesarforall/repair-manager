@@ -11,8 +11,11 @@ public class Dispositivo {
     @Column(name = "id_dispositivo")
     private int idDispositivo;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
+    @Column(nullable = false)
+    private String tipo;    
+
+	@Column(name = "fabricante", nullable = false)
+    private String fabricante;
 
     @Column(name = "modelo", nullable = false)
     private String modelo;
@@ -22,8 +25,9 @@ public class Dispositivo {
 
     public Dispositivo() {}
 
-    public Dispositivo(String nombre, String modelo, String numeroSerie) {
-        this.nombre = nombre;
+    public Dispositivo(String tipo, String fabricante, String modelo, String numeroSerie) {
+        this.tipo = tipo;
+    	this.fabricante = fabricante;
         this.modelo = modelo;
         this.numeroSerie = numeroSerie;
     }
@@ -36,13 +40,21 @@ public class Dispositivo {
     public void setIdDispositivo(int idDispositivo) {
         this.idDispositivo = idDispositivo;
     }
+    
+    public String getTipo() {
+		return tipo;
+	}
 
-    public String getNombre() {
-        return nombre;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+    public String getFabricante() {
+        return fabricante;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setFabricante(String fabricante) {
+        this.fabricante = fabricante;
     }
 
     public String getModelo() {
@@ -63,6 +75,6 @@ public class Dispositivo {
     
     @Override
 	public String toString() {
-		return idDispositivo + " " + nombre + " " + modelo + " " + numeroSerie;
+		return idDispositivo + " " + tipo + " " + fabricante + " " + modelo + " " + numeroSerie;
 	}
 }
