@@ -14,6 +14,7 @@ import util.LoggerUtil;
 import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
+import util.Utils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,14 +41,18 @@ public class ClientsViewController implements StatusAware {
     @FXML
     public void initialize() {
     	TableColumnBuilder.addColumn(clientsTable, "Id", 100, cellData ->
-    		new SimpleObjectProperty<>(cellData.getValue().getIdCliente())
+    		new SimpleObjectProperty<>(Utils.formatIntToId("CL", cellData.getValue().getIdCliente()))
     	);
     	
-    	TableColumnBuilder.addColumn(clientsTable, "Nombre", 150, cellData ->
+    	TableColumnBuilder.addColumn(clientsTable, "Nombre", 200, cellData ->
     		new SimpleObjectProperty<>(cellData.getValue().getNombre())
     	);
     	
-    	TableColumnBuilder.addColumn(clientsTable, "Detalle", 200, cellData ->
+    	TableColumnBuilder.addColumn(clientsTable, "Teléfono", 150, cellData ->
+    		new SimpleObjectProperty<>(cellData.getValue().getTelefono())
+    	);
+    	
+    	TableColumnBuilder.addColumn(clientsTable, "Comentario", 200, cellData ->
 			new SimpleObjectProperty<>(cellData.getValue().getDetalle())
     	);
     	

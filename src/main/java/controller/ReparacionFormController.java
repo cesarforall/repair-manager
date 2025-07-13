@@ -148,7 +148,7 @@ public class ReparacionFormController {
 				clienteComboBox.setConverter(new StringConverter<Cliente>() {
 					@Override
 					public String toString(Cliente cliente) {
-						return cliente != null ? cliente.toString() : "";
+						return cliente != null ? Utils.formatIntToId("CL", cliente.getIdCliente()) + " " + cliente.getNombre() : "";
 					}
 
 					@Override

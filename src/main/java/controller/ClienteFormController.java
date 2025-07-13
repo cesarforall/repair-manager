@@ -10,9 +10,9 @@ public class ClienteFormController {
 	@FXML
 	private TextField nameTextField;
 	@FXML
-	private TextField detailTextField;
-	@FXML
 	private TextField phoneNumberTextField;
+	@FXML
+	private TextField detailTextField;
 	@FXML
 	private Label messageLabel;
 	
@@ -20,17 +20,20 @@ public class ClienteFormController {
 	
 	public void createCliente() {
 		String inputName = nameTextField.getText();
-		String inputDetails = detailTextField.getText();
 		String phoneNumber = phoneNumberTextField.getText();
+		String inputDetails = detailTextField.getText();
 		
 		System.out.println(inputName);
 		
 		if (inputName == null || inputName.trim().isEmpty()) {
 			messageLabel.setStyle("-fx-text-fill: red;");
 			messageLabel.setText(" El campo \"Nombre\" es obligatorio.");								
-		} else {
+		}else if (!phoneNumber.matches("\\d+")) {
+	    	messageLabel.setStyle("-fx-text-fill: red;");
+	        messageLabel.setText("Ingrese un número válido.");
+	    } else {
 			try {
-				Cliente cliente = new Cliente(inputName, inputDetails);
+				Cliente cliente = new Cliente(inputName, phoneNumber, inputDetails);
 				
 				clienteService.save(cliente);
 				messageLabel.setStyle("-fx-text-fill: green;");
@@ -39,8 +42,8 @@ public class ClienteFormController {
 				detailTextField.setText(null);
 				phoneNumberTextField.setText(null);			
 			} catch (Exception e) {
-				System.err.println("Error al crear Cliente.");
-				e.printStackTrace();
+				messageLabel.setStyle("-fx-text-fill: red;");
+		        messageLabel.setText("Error al crear Cliente.");
 			}
 		}
 	}

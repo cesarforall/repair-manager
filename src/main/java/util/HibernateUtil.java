@@ -37,6 +37,7 @@ public class HibernateUtil {
 				CREATE TABLE IF NOT EXISTS CLIENTES (
 				    id_cliente INTEGER PRIMARY KEY,
 				    nombre TEXT NOT NULL,
+				    telefono TEXT NOT NULL,
 				    detalle TEXT
 				);
 				

@@ -14,12 +14,15 @@ public class Cliente {
     @Column(name = "id_cliente")
     private int idCliente;
     private String nombre;
-    private String detalle;
+    private String telefono;
+
+	private String detalle;
 
     public Cliente() {}
 
-    public Cliente(String nombre, String detalle) {
+    public Cliente(String nombre, String telefono, String detalle) {
         this.nombre = nombre;
+        this.telefono = telefono;
         this.detalle = detalle;
     }
 
@@ -38,6 +41,14 @@ public class Cliente {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
 
     public String getDetalle() {
         return detalle;

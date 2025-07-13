@@ -37,10 +37,10 @@
                <children>
                   <Label text="Nombre:" />
                   <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
-                  <Label text="Detalle:" GridPane.rowIndex="1" />
-                  <TextField fx:id="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label text="Teléfono:" GridPane.rowIndex="2" />
-                  <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label text="Teléfono:" GridPane.rowIndex="1" />
+                  <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Comentario:" GridPane.rowIndex="2" />
+                  <TextField fx:id="detailTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <HBox alignment="CENTER_LEFT">
