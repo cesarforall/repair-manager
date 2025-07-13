@@ -371,7 +371,7 @@ public class RepairViewController implements StatusAware{
     		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     		alert.setTitle("Confirmación de eliminación");
     		alert.setHeaderText("¿Seguro que deseas eliminar la reparación R" + this.repair.getIdReparacion() + "?");
-    		alert.setContentText("Esta opción no se puede deshacer");
+    		alert.setContentText("No se podrá recuperar esta reparación.");
     		
     		Optional<ButtonType> result = alert.showAndWait();
     		if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -380,14 +380,14 @@ public class RepairViewController implements StatusAware{
     				reparacionService.delete(repair);
     				
         			updateStatusMessage(new StatusMessage(Type.INFO, "Se ha eliminado R" + this.repair.getIdReparacion() + "."));
+        			mainWindowController.closeTab(repairTab);
 				} catch (ServiceException e) {
 					Platform.runLater(() -> {
 						updateStatusMessage(new StatusMessage(Type.ERROR, "Se ha producido un error al eliminar la reparacion"));						
 					});
 					LoggerUtil.logError(e.getMessage(), e);
 				}    			
-    		}
-    		mainWindowController.closeTab(repairTab);    		
+    		}    		    		
     	}
     }
     
@@ -398,7 +398,7 @@ public class RepairViewController implements StatusAware{
     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	alert.setTitle("Confirmación de cierre");
     	alert.setHeaderText("¿Seguro que deseas cerrar esta reparación?");
-    	alert.setContentText("No se podrán modificar los datos.");
+    	alert.setContentText("- No se podrán modificar los datos.\n- No se podrá eliminar la reparación.");
 
     	Optional<ButtonType> result = alert.showAndWait();
     	if (result.isPresent() && result.get() == ButtonType.OK) {

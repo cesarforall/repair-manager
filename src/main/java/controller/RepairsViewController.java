@@ -138,14 +138,6 @@ public class RepairsViewController implements StatusAware {
     }
     
     private void addContextMenu() {
-    	List<Estado> estados;
-    	try {
-    		EstadoService estadoService = new EstadoService();        	
-    		estados = estadoService.findAll().stream().filter(e -> !e.getNombre().equalsIgnoreCase("Cerrada")).toList();
-		} catch (Exception e) {
-			throw new ControllerException("Error al obtener los estados.");
-		}    	
-    	
     	GenericContextMenuBuilder.attach(repairsTable, repair -> {
     		MenuItem view = new MenuItem("Ver");
     		view.setOnAction(e -> openRepairTab(repair));
@@ -154,15 +146,26 @@ public class RepairsViewController implements StatusAware {
     			return Arrays.asList(view);
 			} else {
 				Menu statesItem = new Menu("Cambiar estado");
-
-        		for (Estado estado : estados) {
-        			MenuItem stateItem = new MenuItem(estado.getNombre());
-        			stateItem.setOnAction(e -> {
-        				ReparacionService.updateState(repair, estado);
-        				refreshRepairs();
-        			});
-        			statesItem.getItems().add(stateItem);
-        		}
+				
+				try {
+		    		EstadoService estadoService = new EstadoService();        	
+		    		List<Estado> estados = estadoService.findAll().stream()
+		    				.filter(e -> !e.getNombre().equalsIgnoreCase("Cerrada") &&
+		    							 !e.getNombre().equalsIgnoreCase(repair.getEstado().getNombre()))
+		    				.toList();
+		    		
+		    		for (Estado estado : estados) {
+	        			MenuItem stateItem = new MenuItem(estado.getNombre());
+	        			stateItem.setOnAction(e -> {
+	        				ReparacionService.updateState(repair, estado);
+	        				refreshRepairs();
+	        			});
+	        			statesItem.getItems().add(stateItem);
+	        		}
+				} catch (Exception e) {
+					throw new ControllerException("Error al obtener los estados.");
+				}
+        		
     			return Arrays.asList(view, statesItem);
 
 			}
@@ -239,6 +242,8 @@ public class RepairsViewController implements StatusAware {
     	if (repairs == null || repairs.isEmpty()) {
             repairsTable.setPlaceholder(new Label("No se encontraron reparaciones en la base de datos."));
         }
+    	
+    	addContextMenu();
     }
 
 	@Override

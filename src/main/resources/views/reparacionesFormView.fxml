@@ -51,7 +51,7 @@
                   <Label text="Estado:" GridPane.rowIndex="3" />
                   <ComboBox fx:id="estadoComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Button onAction="#updateEstadoComboBox" text="Refrescar" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Label text="Detalle:" GridPane.rowIndex="4" />
+                  <Label text="Comentario:" GridPane.rowIndex="4" />
                   <TextField fx:id="detalleTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>

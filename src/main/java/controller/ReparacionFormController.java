@@ -10,9 +10,11 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import model.Cliente;
 import model.Dispositivo;
@@ -47,6 +49,19 @@ public class ReparacionFormController {
 	@FXML
 	public void initialize() {
 		fechaEntradaDatePicker.setValue(java.time.LocalDate.now());
+		
+		fechaEntradaDatePicker.setDayCellFactory(new Callback<>() {
+		    @Override
+		    public DateCell call(DatePicker picker) {
+		        return new DateCell() {
+		            @Override
+		            public void updateItem(LocalDate date, boolean empty) {
+		                super.updateItem(date, empty);
+		                setDisable(empty || date.isAfter(LocalDate.now()));
+		            }
+		        };
+		    }
+		});
 		
 		Platform.runLater(this::loadData);	
 	}
