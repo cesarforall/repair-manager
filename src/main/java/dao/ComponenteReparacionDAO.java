@@ -6,21 +6,21 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import model.Reparacion;
-import model.Repuesto;
-import model.RepuestoReparacion;
-import model.RepuestoReparacionId;
+import model.Componente;
+import model.ComponenteReparacion;
+import model.ComponenteReparacionId;
 import util.HibernateUtil;
 
-public class RepuestoReparacionDAO implements GenericDAO<RepuestoReparacion> {
+public class ComponenteReparacionDAO implements GenericDAO<ComponenteReparacion> {
 
-	public void save(RepuestoReparacion partRepair) {
+	public void save(ComponenteReparacion partRepair) {
 	    Transaction transaction = null;
 	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 	        transaction = session.beginTransaction();
 
 	        // Obtener la referencia de las clases mientras la sesión está abierta
 	        partRepair.setReparacion(session.get(Reparacion.class, partRepair.getReparacion().getIdReparacion()));
-	        partRepair.setRepuesto(session.get(Repuesto.class, partRepair.getRepuesto().getIdRepuesto()));
+	        partRepair.setComponente(session.get(Componente.class, partRepair.getComponente().getidComponente()));
 
 	        session.persist(partRepair);
 
@@ -29,12 +29,12 @@ public class RepuestoReparacionDAO implements GenericDAO<RepuestoReparacion> {
 	        if (transaction != null && transaction.isActive()) {
 	            transaction.rollback();
 	        }
-	        throw new DAOException("Error al guardar RepuestoReparacion.", e);
+	        throw new DAOException("Error al guardar ComponenteReparacion.", e);
 	    }
 	}
 
 	@Override
-	public void update(RepuestoReparacion entity) {
+	public void update(ComponenteReparacion entity) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
@@ -42,12 +42,12 @@ public class RepuestoReparacionDAO implements GenericDAO<RepuestoReparacion> {
 			transaction.commit();
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
-			throw new DAOException("Error al actualizar RepuestoReparacion.", e);
+			throw new DAOException("Error al actualizar ComponenteReparacion.", e);
 		}
 	}
 
 	@Override
-	public void delete(RepuestoReparacion entity) {
+	public void delete(ComponenteReparacion entity) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
@@ -55,63 +55,63 @@ public class RepuestoReparacionDAO implements GenericDAO<RepuestoReparacion> {
 			transaction.commit();
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
-			throw new DAOException("Error al eliminar RepuestoReparacion.", e);
+			throw new DAOException("Error al eliminar ComponenteReparacion.", e);
 		}
 	}
 	
 	public void deleteByReparacion(int idReparacion) {
 	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 	        session.beginTransaction();
-	        String hql = "DELETE FROM RepuestoReparacion WHERE reparacion.id = :idReparacion";
+	        String hql = "DELETE FROM ComponenteReparacion WHERE reparacion.id = :idReparacion";
 	        session.createMutationQuery(hql)
 	               .setParameter("idReparacion", idReparacion)
 	               .executeUpdate();
 	        session.getTransaction().commit();
 	    } catch (Exception e) {
-	        throw new DAOException("Error al eliminar repuestos de la reparación.", e);
+	        throw new DAOException("Error al eliminar componentes de la reparación.", e);
 	    }
 	}
 
 	@Override
-	public RepuestoReparacion findById(int id) {
-		throw new UnsupportedOperationException("Usa findById(RepuestoReparacionId id) para esta entidad.");
+	public ComponenteReparacion findById(int id) {
+		throw new UnsupportedOperationException("Usa findById(ComponenteReparacionId id) para esta entidad.");
 	}
 
 	@Override
-	public List<RepuestoReparacion> findAll() {
+	public List<ComponenteReparacion> findAll() {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			return session.createQuery("FROM RepuestoReparacion", RepuestoReparacion.class).list();
+			return session.createQuery("FROM ComponenteReparacion", ComponenteReparacion.class).list();
 		} catch (Exception e) {
-			throw new DAOException("Error al obtener todos los RepuestoReparacion.", e);
+			throw new DAOException("Error al obtener todos los ComponenteReparacion.", e);
 		}
 	}
 
-	public RepuestoReparacion findById(RepuestoReparacionId id) {
+	public ComponenteReparacion findById(ComponenteReparacionId id) {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			return session.get(RepuestoReparacion.class, id);
+			return session.get(ComponenteReparacion.class, id);
 		} catch (Exception e) {
-			throw new DAOException("Error al buscar RepuestoReparacion por ID compuesto.", e);
+			throw new DAOException("Error al buscar ComponenteReparacion por ID compuesto.", e);
 		}
 	}
 	
-	public RepuestoReparacion findByReparacionAndRepuesto(int idReparacion, int idRepuesto) {
+	public ComponenteReparacion findByReparacionAndComponente(int idReparacion, int idComponente) {
 	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-	        String hql = "FROM RepuestoReparacion WHERE reparacion.id = :idReparacion AND repuesto.id = :idRepuesto";
-	        return session.createQuery(hql, RepuestoReparacion.class)
+	        String hql = "FROM ComponenteReparacion WHERE reparacion.id = :idReparacion AND componente.id = :idComponente";
+	        return session.createQuery(hql, ComponenteReparacion.class)
 	                     .setParameter("idReparacion", idReparacion)
-	                     .setParameter("idRepuesto", idRepuesto)
+	                     .setParameter("idComponente", idComponente)
 	                     .uniqueResult();
 	    }
 	}
 	
-	public List<RepuestoReparacion> findByReparacion(int idReparacion) {
+	public List<ComponenteReparacion> findByReparacion(int idReparacion) {
 	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-	        String hql = "FROM RepuestoReparacion WHERE reparacion.idReparacion = :idReparacion";
-	        return session.createQuery(hql, RepuestoReparacion.class)
+	        String hql = "FROM ComponenteReparacion WHERE reparacion.idReparacion = :idReparacion";
+	        return session.createQuery(hql, ComponenteReparacion.class)
 	            .setParameter("idReparacion", idReparacion)
 	            .list();
 	    } catch (Exception e) {
-	        throw new DAOException("Error al obtener repuestos por reparación.", e);
+	        throw new DAOException("Error al obtener componentes por reparación.", e);
 	    }
 	}
 }

@@ -6,7 +6,7 @@ import dao.ClienteDAO;
 import dao.DispositivoDAO;
 import dao.EstadoDAO;
 import dao.ReparacionDAO;
-import dao.RepuestoReparacionDAO;
+import dao.ComponenteReparacionDAO;
 import model.Estado;
 import model.Reparacion;
 
@@ -16,14 +16,14 @@ public class ReparacionService {
     private DispositivoDAO dispositivoDAO;
     private ClienteDAO clienteDAO;
     private EstadoDAO estadoDAO;
-    private RepuestoReparacionDAO repuestoReparacionDAO;
+    private ComponenteReparacionDAO componenteReparacionDAO;
 
     public ReparacionService() {
         reparacionDAO = new ReparacionDAO();
         dispositivoDAO = new DispositivoDAO();
         clienteDAO = new ClienteDAO();
         estadoDAO = new EstadoDAO();
-        repuestoReparacionDAO = new RepuestoReparacionDAO();
+        componenteReparacionDAO = new ComponenteReparacionDAO();
     }
 
     public void save(Reparacion Reparacion) {
@@ -59,7 +59,7 @@ public class ReparacionService {
 
     public void delete(Reparacion reparacion) {
         try {
-            repuestoReparacionDAO.deleteByReparacion(reparacion.getIdReparacion());
+            componenteReparacionDAO.deleteByReparacion(reparacion.getIdReparacion());
 
             reparacionDAO.delete(reparacion);
         } catch (Exception e) {

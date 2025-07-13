@@ -3,13 +3,13 @@ package model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "REPUESTOS")
-public class Repuesto {
+@Table(name = "COMPONENTES")
+public class Componente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_repuesto")
-    private int idRepuesto;
+    @Column(name = "id_componente")
+    private int idComponente;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -17,19 +17,19 @@ public class Repuesto {
     @Column(name = "precio", nullable = false)
     private double precio;
 
-    public Repuesto() {}
+    public Componente() {}
 
-    public Repuesto(String nombre, double precio) {
+    public Componente(String nombre, double precio) {
         this.nombre = nombre;
         this.precio = precio;
     }
 
-    public int getIdRepuesto() {
-        return idRepuesto;
+    public int getidComponente() {
+        return idComponente;
     }
 
-    public void setIdRepuesto(int idRepuesto) {
-        this.idRepuesto = idRepuesto;
+    public void setidComponente(int idComponente) {
+        this.idComponente = idComponente;
     }
 
     public String getNombre() {
@@ -50,6 +50,6 @@ public class Repuesto {
     
     @Override
    	public String toString() {
-   		return "C" + idRepuesto + " " + nombre;
+   		return "C" + idComponente + " " + nombre;
    	}
 }

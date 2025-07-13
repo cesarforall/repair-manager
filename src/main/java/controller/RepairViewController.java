@@ -26,12 +26,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.Estado;
 import model.Reparacion;
-import model.Repuesto;
-import model.RepuestoReparacion;
+import model.Componente;
+import model.ComponenteReparacion;
 import service.EstadoService;
 import service.ReparacionService;
-import service.RepuestoReparacionService;
-import service.RepuestoService;
+import service.ComponenteReparacionService;
+import service.ComponenteService;
 import service.ServiceException;
 import util.GenericContextMenuBuilder;
 import util.LoggerUtil;
@@ -58,11 +58,11 @@ public class RepairViewController implements StatusAware{
 	@FXML
 	TextArea commentsTextArea;
 	@FXML
-	ComboBox<Repuesto> partsComboBox;
+	ComboBox<Componente> partsComboBox;
 	@FXML
 	TextField quantityTextField;
 	@FXML
-	TableView<RepuestoReparacion> partsTable;
+	TableView<ComponenteReparacion> partsTable;
 	@FXML
 	Label partsMessageLabel;
 	@FXML
@@ -99,24 +99,24 @@ public class RepairViewController implements StatusAware{
 	
 	private Reparacion repair;
 	
-	RepuestoService repuestoService = new RepuestoService();
-	RepuestoReparacionService repuestoReparacionService = new RepuestoReparacionService();
+	ComponenteService componenteService = new ComponenteService();
+	ComponenteReparacionService componenteReparacionService = new ComponenteReparacionService();
 	
 	@FXML
 	public void initialize() {
 		TableColumnBuilder.addColumn(partsTable, "Id", 80, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getRepuesto().getIdRepuesto()));
+		new SimpleObjectProperty<>(cellData.getValue().getComponente().getidComponente()));
 		
 		TableColumnBuilder.addColumn(partsTable, "Nombre", 200, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getRepuesto().getNombre()));
+		new SimpleObjectProperty<>(cellData.getValue().getComponente().getNombre()));
 		
 		TableColumnBuilder.addColumn(partsTable, "Precio", 100, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getRepuesto().getPrecio()));
+		new SimpleObjectProperty<>(cellData.getValue().getComponente().getPrecio()));
 		
 		TableColumnBuilder.addColumn(partsTable, "Cantidad", 100, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getCantidad()));
 		    	
-    	placeholderLabel = new Label("Cargando Repuestos...");
+    	placeholderLabel = new Label("Cargando Componentes...");
     	partsTable.setPlaceholder(placeholderLabel);
 		
 		Platform.runLater(this::loadRepair);
@@ -141,7 +141,7 @@ public class RepairViewController implements StatusAware{
 	public void addPart() {
 		if (addPartButton.isDisabled()) return;
 		
-	    Repuesto selectedPart = partsComboBox.getValue();
+	    Componente selectedPart = partsComboBox.getValue();
 	    String quantityText = quantityTextField.getText();
 
 	    if (selectedPart == null) {
@@ -157,8 +157,8 @@ public class RepairViewController implements StatusAware{
 	        try {
 	            int quantity = Integer.parseInt(quantityText);
 
-	            RepuestoReparacion partRepair = new RepuestoReparacion(repair, selectedPart, quantity);
-	            RepuestoReparacionService service = new RepuestoReparacionService();
+	            ComponenteReparacion partRepair = new ComponenteReparacion(repair, selectedPart, quantity);
+	            ComponenteReparacionService service = new ComponenteReparacionService();
 	            service.save(partRepair);
 
 	            refreshPartsTable();
@@ -175,9 +175,9 @@ public class RepairViewController implements StatusAware{
 	    }
 	}
 
-	private void removePart(RepuestoReparacion part) {
+	private void removePart(ComponenteReparacion part) {
 	    try {
-	        RepuestoReparacionService service = new RepuestoReparacionService();
+	        ComponenteReparacionService service = new ComponenteReparacionService();
 	        service.delete(part);
 	        refreshPartsTable();
 	        partsMessageLabel.setStyle("-fx-text-fill: green;");
@@ -219,7 +219,7 @@ public class RepairViewController implements StatusAware{
 	            incomeTextField.setText(String.valueOf(repair.getIngresos()));
 	            pathLabel.setText(repair.getEnlaceDocumento());
 	
-	            double expenses = new RepuestoReparacionService().calculateTotalByRepair(repair.getIdReparacion());
+	            double expenses = new ComponenteReparacionService().calculateTotalByRepair(repair.getIdReparacion());
 	            double income = repair.getIngresos();
 	            double total = income - expenses;
 	            double profit = (income == 0) ? 0 : (total / income) * 100;
@@ -240,8 +240,8 @@ public class RepairViewController implements StatusAware{
     private void loadParts() {
     	new Thread(() -> {
     		try {
-                List<Repuesto> parts = repuestoService.findAll();
-                ObservableList<Repuesto> observableParts = FXCollections.observableArrayList(parts);
+                List<Componente> parts = componenteService.findAll();
+                ObservableList<Componente> observableParts = FXCollections.observableArrayList(parts);
                 
                 Platform.runLater(() -> {
                     partsComboBox.setItems(observableParts);
@@ -261,15 +261,15 @@ public class RepairViewController implements StatusAware{
 	private void loadPartsRepair() {
 	    new Thread(() -> {
 	        try {
-	            List<RepuestoReparacion> repuestos = repuestoReparacionService.findByRepairId(repair.getIdReparacion());
-	            ObservableList<RepuestoReparacion> observableRepuestos = FXCollections.observableArrayList(repuestos);
+	            List<ComponenteReparacion> componentes = componenteReparacionService.findByRepairId(repair.getIdReparacion());
+	            ObservableList<ComponenteReparacion> observableComponentes = FXCollections.observableArrayList(componentes);
 	
 	            Platform.runLater(() -> {
-	                if (repuestos == null || repuestos.isEmpty()) {
+	                if (componentes == null || componentes.isEmpty()) {
 	                    partsTable.setPlaceholder(new Label("No se encontraron componentes en la reparación."));
 	                    partsTable.getItems().clear();
 	                } else {
-	                    partsTable.setItems(observableRepuestos);
+	                    partsTable.setItems(observableComponentes);
 	                }
 	            });
 	        } catch (ServiceException e) {
@@ -286,10 +286,10 @@ public class RepairViewController implements StatusAware{
     private void refreshPartsTable() {
     	if (refreshPartsButton.isDisabled()) return;
 
-        List<RepuestoReparacion> repuestos = repuestoReparacionService.findByRepairId(repair.getIdReparacion());
-        partsTable.setItems(FXCollections.observableArrayList(repuestos));
+        List<ComponenteReparacion> componentes = componenteReparacionService.findByRepairId(repair.getIdReparacion());
+        partsTable.setItems(FXCollections.observableArrayList(componentes));
 
-        if (repuestos == null || repuestos.isEmpty()) {
+        if (componentes == null || componentes.isEmpty()) {
             partsTable.setPlaceholder(new Label("No se encontraron componentes en la reparación"));
         }
 
@@ -321,7 +321,7 @@ public class RepairViewController implements StatusAware{
     	
         try {
             double income = incomeTextField.getText().isBlank() ? 0 : Double.parseDouble(incomeTextField.getText());
-            RepuestoReparacionService service = new RepuestoReparacionService();
+            ComponenteReparacionService service = new ComponenteReparacionService();
             double expenses = service.calculateTotalByRepair(repair.getIdReparacion());
             double total = income - expenses;
             double profit = (income == 0) ? 0 : (total / income) * 100;

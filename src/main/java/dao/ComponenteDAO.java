@@ -5,68 +5,68 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import model.Repuesto;
+import model.Componente;
 import util.HibernateUtil;
 
-public class RepuestoDAO implements GenericDAO<Repuesto>{
+public class ComponenteDAO implements GenericDAO<Componente>{
 	@Override
-	public void save(Repuesto repuesto) {
+	public void save(Componente componente) {
 		Transaction transaction = null;		
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			session.persist(repuesto);			
+			session.persist(componente);			
 			transaction.commit();
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
-			throw new DAOException("Error al guardar el repuesto.", e);
+			throw new DAOException("Error al guardar el componente.", e);
 		}		
 	}
 
 	@Override
-	public void update(Repuesto repuesto) {
+	public void update(Componente componente) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
-			session.merge(repuesto);
+			session.merge(componente);
 			transaction.commit();			
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
-			throw new DAOException("Error al actualizar el repuesto.", e);
+			throw new DAOException("Error al actualizar el componente.", e);
 		}		
 	}
 
 	@Override
-	public void delete(Repuesto repuesto) {
+	public void delete(Componente componente) {
 		Transaction transaction = null;		
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
-			session.remove(repuesto);			
+			session.remove(componente);			
 			transaction.commit();
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
-			throw new DAOException("Error al eliminar el repuesto.", e);
+			throw new DAOException("Error al eliminar el componente.", e);
 		}		
 	}
 
 	@Override
-	public Repuesto findById(int id) {
+	public Componente findById(int id) {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			return session.get(Repuesto.class, id);			
+			return session.get(Componente.class, id);			
 		} catch (Exception e) {
-			throw new DAOException("Error al buscar el repuesto por ID.", e);
+			throw new DAOException("Error al buscar el componente por ID.", e);
 		}
 	}
 
 	@Override
-	public List<Repuesto> findAll() {
+	public List<Componente> findAll() {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();			
-			List<Repuesto> repuestos = session.createQuery("FROM Repuesto", Repuesto.class).getResultList();						
+			List<Componente> componentes = session.createQuery("FROM Componente", Componente.class).getResultList();						
 			transaction.commit();
-			return repuestos;
+			return componentes;
 		} catch (Exception e) {
-			throw new DAOException("Error al obtener todos los repuestos.", e);
+			throw new DAOException("Error al obtener todos los componentes.", e);
 		}		
 	}
 }

@@ -3,10 +3,10 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.Repuesto;
-import service.RepuestoService;
+import model.Componente;
+import service.ComponenteService;
 
-public class PartFormController {
+public class ComponentFormController {
 	@FXML
 	private TextField nameTextField;
 	@FXML
@@ -14,13 +14,13 @@ public class PartFormController {
 	@FXML
 	private Label messageLabel;
 	
-	RepuestoService repuestoService = new RepuestoService();
+	ComponenteService componenteService = new ComponenteService();
 	
-	public void addSparePart() {
-		String sparePartName = nameTextField.getText();
+	public void addComponent() {
+		String componentName = nameTextField.getText();
 		String priceText = priceTextField.getText();
 		
-	    if (sparePartName == null || sparePartName.trim().isEmpty()) {
+	    if (componentName == null || componentName.trim().isEmpty()) {
 	        messageLabel.setStyle("-fx-text-fill: red;");
 	        messageLabel.setText("El campo \"Nombre\" es obligatorio.");
 	    } else if (priceText == null || priceText.trim().isEmpty()) {
@@ -30,18 +30,18 @@ public class PartFormController {
 			messageLabel.setStyle("-fx-text-fill: red;");
 	        messageLabel.setText("El campo \"Precio\" debe ser un número válido.");
 		} else {
-			Double sparePartPrice = Double.parseDouble(priceText);
+			Double componentPrice = Double.parseDouble(priceText);
 			
 			try {
-				Repuesto repuesto = new Repuesto(sparePartName, sparePartPrice);
+				Componente component = new Componente(componentName, componentPrice);
 				
-				repuestoService.save(repuesto);
+				componenteService.save(component);
 				messageLabel.setStyle("-fx-text-fill: green;");
-				messageLabel.setText("Repuesto \"" + sparePartName + "\" añadido correctamente.");
+				messageLabel.setText("Componente \"" + componentName + "\" añadido correctamente.");
 				nameTextField.setText(null);
 				priceTextField.setText(null);
 			} catch (Exception e) {
-				System.err.println("Error en RepuestosController al añadir repuesto.");
+				System.err.println("Error en ComponentsController al añadir component.");
 				e.printStackTrace();
 			}
 		}

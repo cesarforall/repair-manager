@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RepuestosViewController">
+<VBox xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ComponentsViewController">
    <children>
       <VBox spacing="10.0">
          <children>
          	<HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="Repuestos">
+                  <Label text="Componentes">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -29,7 +29,7 @@
             </HBox>
             <HBox>
                <children>
-                  <Button onAction="#refreshSpareParts" text="Refrescar" />
+                  <Button onAction="#refreshComponents" text="Refrescar" />
                </children>
             </HBox>
          </children>
@@ -37,6 +37,6 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>      
-      <TableView fx:id="repuestosTable" VBox.vgrow="ALWAYS" />
+      <TableView fx:id="componentesTable" VBox.vgrow="ALWAYS" />
    </children>
 </VBox>

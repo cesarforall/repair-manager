@@ -29,13 +29,13 @@ public class MainWindowController {
     public void initialize() {
     	createMenuItem(fileMenu, "Nuevo Cliente", this::openClientForm);
     	createMenuItem(fileMenu, "Nuevo Dispositivo", this::openDeviceForm);
-    	createMenuItem(fileMenu, "Nuevo Repuesto", this::openPartForm);
+    	createMenuItem(fileMenu, "Nuevo Componente", this::openPartForm);
     	createMenuItem(fileMenu, "Nuevo Estado", this::openStateForm);
     	createMenuItem(fileMenu, "Nueva Reparación", this::openRepairForm);
     	
     	createMenuItem(viewMenu, "Clientes", this::openClientsView);
     	createMenuItem(viewMenu, "Dispositivos", this::openDevicesView);
-    	createMenuItem(viewMenu, "Repuestos", this::openPartsView);
+    	createMenuItem(viewMenu, "Componentes", this::openPartsView);
     	createMenuItem(viewMenu, "Estados", this::openStatesView);
     	createMenuItem(viewMenu, "Reparaciones", this::openRepairsView);
     	
@@ -49,7 +49,7 @@ public class MainWindowController {
     	openTab("Nuevo Dispositivo", "/views/dispositivoForm.fxml", false);
     }        
     public void openPartForm() {
-    	openTab("Nuevo Repuesto", "/views/partForm.fxml", false);
+    	openTab("Nuevo Componente", "/views/componentForm.fxml", false);
     }
     public void openStateForm() {
     	openTab("Nuevo Estado", "/views/stateForm.fxml", false);
@@ -65,7 +65,7 @@ public class MainWindowController {
     	openTab("Dispositivos", "/views/devicesView.fxml", true);
     }
     public void openPartsView() {
-    	openTab("Repuestos", "/views/repuestosView.fxml", true);
+    	openTab("Componentes", "/views/componentsView.fxml", true);
     }
     public void openStatesView() {
     	openTab("Estados", "/views/estadosView.fxml", true);

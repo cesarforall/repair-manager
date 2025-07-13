@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PartFormController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ComponentFormController">
    <children>
       <VBox spacing="10.0">
          <children>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="Añadir repuesto">
+                  <Label text="Añadir componente">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -50,7 +50,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Button mnemonicParsing="false" onAction="#addSparePart" text="Añadir" />
+                  <Button mnemonicParsing="false" onAction="#addComponent" text="Añadir" />
                </children>
             </HBox>
          </children>
