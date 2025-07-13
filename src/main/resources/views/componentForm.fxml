@@ -37,9 +37,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Nombre:" />
+                  <Label text="Referencia:" />
                   <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
-                  <Label text="Precio:" GridPane.rowIndex="1" />
+                  <Label text="Valor (€):" GridPane.rowIndex="1" />
                   <TextField fx:id="priceTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>

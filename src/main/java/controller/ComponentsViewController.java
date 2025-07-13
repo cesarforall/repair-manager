@@ -23,6 +23,7 @@ import util.LoggerUtil;
 import util.StatusAware;
 import util.StatusMessage;
 import util.TableColumnBuilder;
+import util.Utils;
 import util.StatusMessage.Type;
 
 public class ComponentsViewController implements StatusAware {
@@ -40,11 +41,11 @@ public class ComponentsViewController implements StatusAware {
 		TableColumnBuilder.addColumn(componentesTable, "Id", 80, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getidComponente()));
 		
-		TableColumnBuilder.addColumn(componentesTable, "Nombre", 200, cellData ->
+		TableColumnBuilder.addColumn(componentesTable, "Referencia", 200, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getNombre()));
 		
-		TableColumnBuilder.addColumn(componentesTable, "Precio", 100, cellData ->
-		new SimpleObjectProperty<>(cellData.getValue().getPrecio()));
+		TableColumnBuilder.addColumn(componentesTable, "Valor", 100, cellData ->
+		new SimpleObjectProperty<>(Utils.formatDoubleToEuros(cellData.getValue().getPrecio())));
 		    	
     	placeholderLabel = new Label("Cargando Componentes...");
     	componentesTable.setPlaceholder(placeholderLabel);
@@ -93,7 +94,7 @@ public class ComponentsViewController implements StatusAware {
         			updateStatusMessage(new StatusMessage(Type.INFO, "Se ha eliminado " + componente.getNombre() + "."));
 				} catch (ServiceException e) {
 					Platform.runLater(() -> {
-						updateStatusMessage(new StatusMessage(Type.ERROR, "Se ha producido un error al eliminar el componente."));						
+						updateStatusMessage(new StatusMessage(Type.ERROR, "No se puede eliminar un componente asociado a una reparación."));						
 					});
 					LoggerUtil.logError(e.getMessage(), e);
 				}    			

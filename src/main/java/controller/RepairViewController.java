@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
@@ -109,7 +110,7 @@ public class RepairViewController implements StatusAware{
 		TableColumnBuilder.addColumn(partsTable, "Id", 80, cellData ->
 		new SimpleObjectProperty<>(Utils.formatIntToId("C", cellData.getValue().getComponente().getidComponente())));
 		
-		TableColumnBuilder.addColumn(partsTable, "Nombre", 200, cellData ->
+		TableColumnBuilder.addColumn(partsTable, "Referencia", 200, cellData ->
 		new SimpleObjectProperty<>(cellData.getValue().getComponente().getNombre()));
 		
 		TableColumnBuilder.addColumn(partsTable, "Valor", 100, cellData ->
@@ -250,9 +251,14 @@ public class RepairViewController implements StatusAware{
                 
                 Platform.runLater(() -> {
                     partsComboBox.setItems(observableParts);
-                    if (!observableParts.isEmpty()) {
-                        partsComboBox.getSelectionModel().selectFirst();
-                    }
+                    
+                    partsComboBox.setCellFactory(lv -> new ListCell<>() {
+                        @Override
+                        protected void updateItem(Componente item, boolean empty) {
+                            super.updateItem(item, empty);
+                            setText(empty || item == null ? null : Utils.formatIntToId("C", item.getidComponente()) + " " + item.getNombre());
+                        }
+                    });
                 });
             } catch (ServiceException e) {
                 Platform.runLater(() -> {

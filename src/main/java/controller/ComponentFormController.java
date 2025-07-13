@@ -22,15 +22,16 @@ public class ComponentFormController {
 		
 	    if (componentName == null || componentName.trim().isEmpty()) {
 	        messageLabel.setStyle("-fx-text-fill: red;");
-	        messageLabel.setText("El campo \"Nombre\" es obligatorio.");
+	        messageLabel.setText("El campo \"Referencia\" es obligatorio.");
 	    } else if (priceText == null || priceText.trim().isEmpty()) {
 	        messageLabel.setStyle("-fx-text-fill: red;");
-	        messageLabel.setText("El campo \"Precio\" es obligatorio.");							
-		} else if (!priceText.matches("\\d+(\\.\\d+)?")) {
+	        messageLabel.setText("El campo \"Valor\" es obligatorio.");							
+		} else if (!priceText.matches("\\d+(\\.|,)?\\d*")) {
 			messageLabel.setStyle("-fx-text-fill: red;");
-	        messageLabel.setText("El campo \"Precio\" debe ser un número válido.");
+	        messageLabel.setText("El campo \"Valor\" debe ser un número válido.");
 		} else {
-			Double componentPrice = Double.parseDouble(priceText);
+			String valueText = priceText.replace(",", ".");
+			Double componentPrice = Double.parseDouble(valueText);
 			
 			try {
 				Componente component = new Componente(componentName, componentPrice);
